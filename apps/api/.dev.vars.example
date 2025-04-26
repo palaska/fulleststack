@@ -1,0 +1,10 @@
+ENVIRONMENT=development
+LOG_LEVEL=debug
+
+# BetterAuth
+BETTER_AUTH_URL=http://localhost:8787 # Base URL of your app
+BETTER_AUTH_SECRET=your_jwt_secret_here_at_least_32_chars_long
+
+# Turso
+TURSO_URL=http://127.0.0.1:8080
+TURSO_AUTH_TOKEN=abc123
