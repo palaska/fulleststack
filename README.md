@@ -1,6 +1,6 @@
 # Hono + React / Vite + Cloudflare + pnpm workspaces monorepo
 
-A monorepo setup using pnpm workspaces with a Hono API and React / vite client deployed to Cloudflare Workers / Static Assets / D1.
+A monorepo setup using pnpm workspaces with a Hono API and React / vite client deployed to Cloudflare Workers / Static Assets / Turso.
 
 Features:
 
@@ -16,10 +16,11 @@ Tech Stack:
 - api
   - hono
   - hono openapi
-  - authjs
+  - better-auth
   - stoker
   - drizzle
   - drizzle-zod
+  - turso
 - web
   - react
   - vite
@@ -48,18 +49,20 @@ Tour:
 pnpm i
 ```
 
-### Create / Update Cloudflare D1 Database id
+### Configure Turso Database
+
+Create a `.dev.vars` file in the `apps/api` directory using the example file as a template:
 
 ```sh
-pnpm dlx wrangler create d1 replace-with-your-database-name-here
+cp apps/api/.dev.vars.example apps/api/.dev.vars
 ```
 
-Update `database_name` and `database_id` in [apps/api/wrangler.toml](./apps/api/wrangler.toml) with the output from wrangler.
+Update the values in the `.dev.vars` file with your Turso credentials.
 
 ### Run DB migrations locally
 
 ```sh
-pnpm run -r db:migrate:local
+pnpm run -r db:push
 ```
 
 ### Start Apps
@@ -74,10 +77,10 @@ All requests to `/api` will be proxied to the hono server running on [http://loc
 
 ## Production Setup
 
-### Run DB migrations on Cloudflare D1
+### Run DB migrations on Turso
 
 ```sh
-pnpm run -r db:migrate:remote
+pnpm run -r db:push
 ```
 
 ### Deploy

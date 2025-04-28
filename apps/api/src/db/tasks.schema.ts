@@ -13,8 +13,10 @@ export const tasks = sqliteTable("tasks", {
     .notNull()
     .default(false),
   createdAt: integer({ mode: "timestamp" })
+    .notNull()
     .$defaultFn(() => new Date()),
   updatedAt: integer({ mode: "timestamp" })
+    .notNull()
     .$defaultFn(() => new Date())
     .$onUpdate(() => new Date()),
 });
