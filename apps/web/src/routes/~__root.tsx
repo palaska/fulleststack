@@ -1,15 +1,17 @@
-import type { SessionContext } from "@hono/auth-js/react";
-
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
+import type { Session, User } from "../lib/auth-client";
+
 import AppNavbar from "../components/app-navbar";
 
-type Session = Parameters<typeof SessionContext>[0]["value"];
+type AppContext = {
+  session?: Session;
+  user?: User;
+};
 
-export const Route = createRootRouteWithContext<{
-  session: Session;
-}>()({
+// Better-Auth session context type
+export const Route = createRootRouteWithContext<AppContext>()({
   component: () => (
     <>
       <AppNavbar />

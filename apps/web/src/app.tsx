@@ -1,12 +1,13 @@
-import { useSession } from "@hono/auth-js/react";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 
+import { useSession } from "@/web/lib/auth-client";
 import { routeTree } from "@/web/route-tree.gen";
 
 const router = createRouter({
   routeTree,
   context: {
     session: undefined,
+    user: undefined,
   },
 });
 
@@ -18,6 +19,7 @@ declare module "@tanstack/react-router" {
 }
 
 export default function App() {
-  const session = useSession();
-  return <RouterProvider router={router} context={{ session }} />;
+  const { data } = useSession();
+  const { session, user } = data ?? {};
+  return <RouterProvider router={router} context={{ session, user }} />;
 }

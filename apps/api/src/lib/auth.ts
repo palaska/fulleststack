@@ -15,6 +15,7 @@ export function configureAuth(db: Db) {
       provider: "sqlite",
       usePlural: true,
     }),
+    trustedOrigins: ["http://localhost:5173"],
     emailAndPassword: {
       enabled: true,
     },

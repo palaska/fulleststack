@@ -6,7 +6,7 @@ import dateFormatter from "@/web/lib/date-formatter";
 import { createTaskQueryOptions } from "@/web/lib/queries";
 import queryClient from "@/web/lib/query-client";
 
-export const Route = createFileRoute("/task/$id/")({
+export const Route = createFileRoute("/task/$id")({
   loader: ({ params }) =>
     queryClient.ensureQueryData(createTaskQueryOptions(params.id)),
   component: RouteComponent,

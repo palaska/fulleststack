@@ -1,9 +1,14 @@
-import { signOut, useSession } from "@hono/auth-js/react";
 import { Link, useLocation } from "@tanstack/react-router";
+
+import { signOut, useSession } from "@/web/lib/auth-client";
 
 export default function AppNavbar() {
   const location = useLocation();
-  const session = useSession();
+  const { data: session, isPending } = useSession();
+
+  // Check if user is an admin
+  const isAdmin = session?.user && "role" in session.user && session.user.role === "admin";
+
   return (
     <nav className="container">
       <ul>
@@ -15,11 +20,17 @@ export default function AppNavbar() {
             <Link to="/">Home</Link>
           </li>
         )}
-        {session.data?.user && (
+        {!isPending && session?.user && (
           <>
+            {/* Show Admin link only to admin users */}
+            {isAdmin && (
+              <li>
+                <Link to="/admin" className="contrast">Admin</Link>
+              </li>
+            )}
             <li className="user-avatar">
-              <img src={session.data.user.image!} />
-              <p>{session.data.user.name}</p>
+              <img src={session.user.image || ""} alt={session.user.name || "User"} />
+              <p>{session.user.name}</p>
             </li>
             <li>
               <button

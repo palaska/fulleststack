@@ -1,5 +1,6 @@
 import type { router } from "@fulleststack/api/routes";
 
+import type { ClientRequestOptions } from "hono/client";
 import { hc } from "hono/client";
 
 // create instance to inline type in build
@@ -8,8 +9,15 @@ import { hc } from "hono/client";
 const client = hc<router>("");
 export type Client = typeof client;
 
-export default (...args: Parameters<typeof hc>): Client =>
-  hc<router>(...args);
+export default (baseUrl: string, options?: ClientRequestOptions): Client => {
+  const opts = {
+    ...options ?? {},
+    fetch: ((input, init) => {
+      return fetch(input, { ...init, credentials: "include" });
+    }) satisfies typeof fetch,
+  };
+  return hc<router>(baseUrl, opts);
+};
 
 export type ErrorSchema = {
   error: {

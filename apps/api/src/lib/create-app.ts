@@ -37,7 +37,7 @@ export default function createApp() {
   app.use(
     "*", // or replace with "*" to enable cors for all routes
     cors({
-      origin: "http://localhost:3001", // replace with your origin
+      origin: "http://localhost:5173",
       allowHeaders: ["Content-Type", "Authorization"],
       allowMethods: ["POST", "GET", "OPTIONS"],
       exposeHeaders: ["Content-Length"],
