@@ -15,8 +15,8 @@
     "hono": "workspace:*"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "workspace:*",
     "@types/node": "workspace:*",
-    "@cloudflare/workers-types": "^4.20241205.0",
     "typescript": "workspace:*"
   }
 }

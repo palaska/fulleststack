@@ -6,7 +6,7 @@
     "paths": {
       "@/api/*": ["../../apps/api/src/*"]
     },
-    "typeRoots": ["./node_modules/@types", "./node_modules/@cloudflare"],
+    "typeRoots": ["../../node_modules/@types", "../../node_modules/@cloudflare"],
     "types": ["workers-types/2023-07-01", "node"],
     "declaration": true,
     "declarationMap": true,

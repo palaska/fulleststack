@@ -12,6 +12,7 @@ overrides:
   react-dom: 18.3.1
   react-test-renderer: 18.3.1
   zod: ^3.24.3
+  '@cloudflare/workers-types': ^4.20241205.0
   '@types/node': ^22.10.2
   '@types/react': ~18.3.12
   '@types/react-dom': 18.3.6
@@ -3816,7 +3817,7 @@ packages:
     resolution: {integrity: sha512-dUcDaZtE/zN4RV/xqGrVSMpnEczxd5cIaoDeor7Zst9wOe/HzC/7eAaulywWGYXdDEc9oBPMjayVEDg0ziTLJA==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
-      '@cloudflare/workers-types': '>=4'
+      '@cloudflare/workers-types': ^4.20241205.0
       '@electric-sql/pglite': '>=0.2.0'
       '@libsql/client': '>=0.10.0'
       '@libsql/client-wasm': '>=0.10.0'
@@ -7589,7 +7590,7 @@ packages:
     engines: {node: '>=18.0.0'}
     hasBin: true
     peerDependencies:
-      '@cloudflare/workers-types': ^4.20250424.0
+      '@cloudflare/workers-types': ^4.20241205.0
     peerDependenciesMeta:
       '@cloudflare/workers-types':
         optional: true
