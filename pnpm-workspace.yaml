@@ -1,3 +1,11 @@
 packages:
   - apps/*
   - packages/*
+
+hoistedDependencies:
+  - react
+  - react-dom
+  - react-native
+  - expo
+  - '@expo/*'
+  - '*react-native*'

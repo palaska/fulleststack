@@ -7,11 +7,28 @@
     "build": "pnpm run -r build",
     "test": "pnpm run -r --parallel test",
     "lint": "pnpm run -r --parallel lint",
-    "deploy": "pnpm build && pnpm run -r deploy"
+    "deploy": "pnpm build && pnpm run -r deploy",
+    "check-versions": "node scripts/check-versions.js",
+    "find-dep-version": "node scripts/find-compatible-version.js",
+    "syncpack:fix": "syncpack fix-mismatches",
+    "syncpack:check": "syncpack list-mismatches",
+    "syncpack:list": "syncpack list"
   },
   "pnpm": {
     "overrides": {
-      "hono": "^4.6.13"
+      "better-auth": "^1.2.7",
+      "hono": "^4.7.8",
+      "wrangler": "^4.12.0",
+      "react": "18.3.1",
+      "react-dom": "18.3.1",
+      "react-test-renderer": "18.3.1",
+      "zod": "^3.24.3",
+      "@types/node": "^22.10.2",
+      "@types/react": "~18.3.12",
+      "@types/react-dom": "18.3.6",
+      "@types/react-test-renderer": "^18.3.0",
+      "typescript": "5.8.3",
+      "eslint": "^9.25.1"
     },
     "ignoredBuiltDependencies": [
       "esbuild",
@@ -19,5 +36,9 @@
       "unrs-resolver",
       "workerd"
     ]
+  },
+  "devDependencies": {
+    "semver": "^7.7.1",
+    "syncpack": "^13.0.4"
   }
 }

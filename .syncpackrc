@@ -1,0 +1,13 @@
+{
+  "filter": "^(?!@fulleststack).*$",
+  "dependencyTypes": ["dev", "prod", "peer"],
+  "versionGroups": [
+    {
+      "label": "All non-local packages must use workspace protocol in sub-packages",
+      "packageManager": "pnpm",
+      "packages": ["apps/**", "packages/**"],
+      "dependencies": ["**"],
+      "policy": "pin-overrides"
+    }
+  ]
+}

@@ -1,0 +1,207 @@
+---
+description: How dependency management works in our monorepo, including version pinning, hoisting, and best practices for adding or updating dependencies
+globs:
+alwaysApply: false
+---
+# Dependency Management in the Monorepo
+
+This guide explains how dependency management works in our monorepo, including version pinning, hoisting, and best practices for adding or updating dependencies.
+
+## Version Pinning Strategy
+
+We pin dependency versions at the root level using PNPM overrides to ensure consistent versions across all packages:
+
+- Root-level pinning is defined in [package.json](mdc:package.json) under `pnpm.overrides`
+- This ensures all packages use the same version of critical dependencies like React
+- React is pinned to 18.3.1 to prevent duplicate React instances in the bundle
+
+## Finding Compatible Package Versions
+
+We have utility scripts to find compatible package versions:
+
+### For React dependencies
+
+Find packages compatible with our React version:
+
+```bash
+pnpm find-version @tanstack/react-query 18.3.1
+```
+
+### For any dependency relationship
+
+Find packages compatible with any specific dependency:
+
+```bash
+pnpm find-dep-version <package-name> <dependency-name> <dependency-version>
+```
+
+For example, to find which version of eslint-plugin-react works with eslint 8.50.0:
+
+```bash
+pnpm find-dep-version eslint-plugin-react eslint 8.50.0
+```
+
+### Advanced Options
+
+The script has been improved to provide better version selection by default, with minimal options:
+
+```bash
+# Search all versions, not just the most recent ones
+# (may be slower but more thorough)
+pnpm find-dep-version <package> <dependency> <version> --all
+
+# Set a custom timeout (default is 60 seconds)
+pnpm find-dep-version <package> <dependency> <version> --timeout=30000
+```
+
+### Version Selection Algorithm
+
+The script uses an intelligent version selection algorithm:
+
+1. **Major Version Organization**:
+   - Groups package versions by major version
+   - Checks each major version in descending order (newest first)
+   - Finds the best stable version for each major version
+   - Typically recommends the highest compatible version
+   - Ensures you get the most up-to-date features and fixes
+
+2. **Stability Prioritization**:
+   - Prioritizes stable releases over pre-releases
+   - Skips deprecated versions automatically
+   - Checks the blacklist to avoid problematic versions
+
+3. **Pre-release Handling**:
+   - Shows relevant newer pre-release versions when they exist
+   - Organizes pre-releases by type (alpha, beta, rc, etc.)
+   - Provides clear warnings about pre-release stability
+
+4. **Efficient Search**:
+   - Stops searching after finding a compatible stable version for the newest major version
+   - For large packages with many versions, this significantly improves performance
+
+The script will display:
+- The recommended stable version with its compatibility details
+- Installation commands you can copy and paste
+- Package.json entry for easy addition to your project
+- Any newer pre-release versions that might be of interest
+
+### Version Blacklisting
+
+The script checks against a blacklist file at [scripts/version-blacklist.json](mdc:scripts/version-blacklist.json).
+You can add problematic versions to this file to prevent them from being recommended:
+
+```json
+{
+  "react-hook-form": ["7.44.0-next.0", "7.43.0-rc.1"],
+  "eslint-plugin-react": ["7.33.0"]
+}
+```
+
+## Adding a New Dependency
+
+1. For workspace-wide dependencies (used by multiple packages):
+   - First check compatibility:
+     - For React dependencies: `pnpm find-version <package-name> 18.3.1`
+     - For other dependencies: `pnpm find-dep-version <package-name> <dependency> <version>`
+   - Add the recommended version to root [package.json](mdc:package.json) overrides
+   - In the individual package.json files, specify `"workspace:*"` as the version
+
+2. For package-specific dependencies:
+   - Add directly to the package's package.json
+   - If it has strict version requirements, consider pinning at the root level
+
+Example in a child package:
+```json
+"dependencies": {
+  "lodash": "workspace:*",
+  "some-local-package": "workspace:*"
+}
+```
+
+## Updating a Dependency Version
+
+1. To update a pinned dependency:
+   - Check compatibility of the new version:
+     - For React-based packages: `pnpm find-version <package-name> 18.3.1`
+     - For other dependencies: `pnpm find-dep-version <package-name> <dependency> <version>`
+   - Modify the version in root [package.json](mdc:package.json) overrides section
+   - Run `pnpm install` to apply changes
+   - Run `pnpm check-versions` to verify consistency
+
+2. Check for conflicts using:
+   ```bash
+   pnpm check-versions
+   ```
+
+## Workspace References
+
+Using `workspace:*` references in inner package.json files is our preferred approach:
+
+- Centralizes version control at the root level
+- Eliminates the need for version synchronization tools
+- Works seamlessly with root overrides
+- Avoids duplication of version specifications
+
+## Hoisting Configuration
+
+Special hoisting is required for React, React Native, and Expo packages:
+
+- Defined in [.npmrc](mdc:.npmrc) and [pnpm-workspace.yaml](mdc:pnpm-workspace.yaml)
+- Hoisting lifts packages to the root node_modules
+- Critical for Expo and React Native which require single instances
+
+## Best Practices
+
+1. Always pin versions for critical shared dependencies:
+   - React and React DOM
+   - Framework dependencies (TanStack, etc.)
+   - Anything shared between web and mobile
+
+2. Use workspace references in child packages:
+   ```json
+   "dependencies": {
+     "react": "workspace:*"
+   }
+   ```
+
+3. Check compatibility before adding new dependencies:
+   ```bash
+   # For React-based dependencies
+   pnpm find-version <package-name> 18.3.1
+
+   # For any other dependency relationship
+   pnpm find-dep-version <package-name> <dependency> <version>
+   ```
+
+4. Blacklist problematic versions:
+   - Add them to [scripts/version-blacklist.json](mdc:scripts/version-blacklist.json)
+   - Include a reason in the comments section for future reference
+
+5. Run version checks after dependency changes:
+   ```bash
+   pnpm check-versions
+   ```
+
+6. Ensure Expo compatibility by maintaining proper hoisting
+
+## Dependency Conflicts
+
+If `pnpm check-versions` shows conflicts:
+1. Decide which version to standardize on
+2. Update the root override
+3. Verify compatibility across all packages
+
+## Type Definitions
+
+For TypeScript type definitions:
+- Find compatible `@types` packages using the find-version script
+- Look for versions with matching major.minor version numbers
+- Pin these in the root overrides like any other dependency
+
+For example, for React 18.3.1:
+```json
+"@types/react": "18.3.20",
+"@types/react-dom": "18.2.21"
+```
+
+For more details on specific configurations, check [scripts/check-versions.js](mdc:scripts/check-versions.js) and [scripts/find-compatible-version.js](mdc:scripts/find-compatible-version.js)
