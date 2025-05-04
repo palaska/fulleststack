@@ -1,0 +1,25 @@
+{
+  "name": "@fulleststack/ui",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "rm -rf dist && tsc",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@tamagui/config": "^1.126.5",
+    "tamagui": "^1.126.5"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "devDependencies": {
+    "@types/node": "workspace:*",
+    "@types/react": ">=18.0.0",
+    "typescript": "workspace:*"
+  }
+}

@@ -1,8 +1,9 @@
 import { useFonts } from "expo-font";
-import { Redirect, SplashScreen, Stack } from "expo-router";
+import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect } from "react";
 import { useSession } from "@/lib/auth-client";
+import { UIProvider } from "@fulleststack/ui";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -24,7 +25,7 @@ export default function RootLayout() {
   }
 
   return (
-    <>
+    <UIProvider>
       <StatusBar style="dark" />
       <Stack>
         <Stack.Screen
@@ -42,6 +43,6 @@ export default function RootLayout() {
           }}
         />
       </Stack>
-    </>
+    </UIProvider>
   );
 }
