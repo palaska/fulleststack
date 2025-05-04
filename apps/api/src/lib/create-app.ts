@@ -10,7 +10,7 @@ import { pinoLogger } from "@/api/middlewares/logger";
 
 import type { AppOpenAPI } from "./types";
 
-import { BASE_PATH } from "./constants";
+import { BASE_PATH, trustedOrigins } from "./constants";
 import createRouter from "./create-router";
 
 export default function createApp() {
@@ -37,7 +37,7 @@ export default function createApp() {
   app.use(
     "*", // or replace with "*" to enable cors for all routes
     cors({
-      origin: "http://localhost:5173",
+      origin: trustedOrigins,
       allowHeaders: ["Content-Type", "Authorization"],
       allowMethods: ["POST", "GET", "OPTIONS"],
       exposeHeaders: ["Content-Length"],

@@ -1,7 +1,6 @@
-import { createRouter, RouterProvider } from "@tanstack/react-router";
-
 import { useSession } from "@/web/lib/auth-client";
 import { routeTree } from "@/web/route-tree.gen";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
 
 const router = createRouter({
   routeTree,

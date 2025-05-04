@@ -1,6 +1,6 @@
 import type { router } from "@fulleststack/api/routes";
-
 import type { ClientRequestOptions } from "hono/client";
+
 import { hc } from "hono/client";
 
 // create instance to inline type in build

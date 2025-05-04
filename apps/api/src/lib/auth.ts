@@ -1,9 +1,12 @@
+import { expo } from "@better-auth/expo";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { admin, openAPI } from "better-auth/plugins";
 
 import type { Db } from "@/api/db";
 import type { accounts, sessions, users } from "@/api/db/auth.schema";
+
+import { trustedOrigins } from "./constants";
 
 export type User = typeof users.$inferInsert;
 export type Session = typeof sessions.$inferInsert;
@@ -15,13 +18,14 @@ export function configureAuth(db: Db) {
       provider: "sqlite",
       usePlural: true,
     }),
-    trustedOrigins: ["http://localhost:5173"],
+    trustedOrigins,
     emailAndPassword: {
       enabled: true,
     },
     plugins: [
       admin(),
       openAPI(),
+      expo(),
     ],
     // advanced: {
     //   crossSubDomainCookies: {

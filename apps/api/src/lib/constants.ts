@@ -14,3 +14,5 @@ export const ZOD_ERROR_CODES = {
 };
 
 export const notFoundSchema = createMessageObjectSchema(HttpStatusPhrases.NOT_FOUND);
+
+export const trustedOrigins = ["fulleststackapp://", "http://localhost:5173", "http://localhost:8081", "exp://localhost:8081"];
