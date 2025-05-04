@@ -50,6 +50,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@fulleststack/eslint-config": "workspace:^",
     "@types/jest": "^29.5.12",
     "@types/react": "workspace:*",
     "@types/react-test-renderer": "workspace:*",

@@ -1,6 +1,5 @@
-import { Link, useLocation } from "@tanstack/react-router";
-
 import { signOut, useSession } from "@/web/lib/auth-client";
+import { Link, useLocation } from "@tanstack/react-router";
 
 export default function AppNavbar() {
   const location = useLocation();

@@ -4,7 +4,9 @@ export default createConfig({
   react: true,
 }, {
   rules: {
-    // Turn off no-require-imports rule
     "ts/no-require-imports": "off",
+    "unicorn/filename-case": "off",
+    "ts/no-use-before-define": "off",
+    "node/no-process-env": "off",
   },
 });

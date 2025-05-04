@@ -1,5 +1,5 @@
-import { createAuthClient } from "better-auth/react";
 import { expoClient } from "@better-auth/expo/client";
+import { createAuthClient } from "better-auth/react";
 import * as SecureStore from "expo-secure-store";
 
 import { API_BASE_URL, APP_NAME } from "../constants/config";
@@ -8,12 +8,12 @@ import { API_BASE_URL, APP_NAME } from "../constants/config";
 export const authClient = createAuthClient({
   baseURL: API_BASE_URL,
   plugins: [
-        expoClient({
-            scheme: APP_NAME,
-            storagePrefix: APP_NAME,
-            storage: SecureStore,
-        })
-    ],
+    expoClient({
+      scheme: APP_NAME,
+      storagePrefix: APP_NAME,
+      storage: SecureStore,
+    }),
+  ],
 });
 
 // Export useful hooks and functions for easy imports elsewhere

@@ -21,7 +21,6 @@
     "test": "cross-env ENVIRONMENT=test vitest"
   },
   "dependencies": {
-    "@fulleststack/eslint-config": "workspace:^",
     "@hono/zod-openapi": "0.19.6",
     "@libsql/client": "0.15.4",
     "@scalar/hono-api-reference": "0.8.5",
@@ -38,6 +37,7 @@
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "0.8.22",
     "@cloudflare/workers-types": "workspace:*",
+    "@fulleststack/eslint-config": "workspace:^",
     "@types/node": "workspace:*",
     "concurrently": "^9.1.2",
     "cross-env": "^7.0.3",

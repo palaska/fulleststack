@@ -1,6 +1,5 @@
-import { Redirect, Stack } from "expo-router";
-
 import { useSession } from "@/lib/auth-client";
+import { Redirect, Stack } from "expo-router";
 
 export default function ProtectedLayout() {
   const { data: session } = useSession();

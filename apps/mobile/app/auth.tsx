@@ -1,49 +1,48 @@
-import React, { useState } from 'react';
+import { authClient } from "@/lib/auth-client";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import React, { useState } from "react";
 import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
+  ActivityIndicator,
+  Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  ActivityIndicator,
-  Alert
-} from 'react-native';
-import { StatusBar } from 'expo-status-bar';
-import { router } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-import { authClient } from '@/lib/auth-client';
-
-type AuthMode = 'login' | 'signup';
+type AuthMode = "login" | "signup";
 
 export default function AuthScreen() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [name, setName] = useState('');
-  const [mode, setMode] = useState<AuthMode>('login');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [name, setName] = useState("");
+  const [mode, setMode] = useState<AuthMode>("login");
   const [loading, setLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const toggleMode = () => {
-    setMode(mode === 'login' ? 'signup' : 'login');
-    setEmail('');
-    setPassword('');
-    setConfirmPassword('');
-    setName('');
+    setMode(mode === "login" ? "signup" : "login");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+    setName("");
   };
 
   const handleSignIn = async () => {
     if (!email || !password) {
-      Alert.alert('Error', 'Please fill in all required fields');
+      Alert.alert("Error", "Please fill in all required fields");
       return;
     }
 
     setLoading(true);
-    const res = await authClient.signIn.email(
+    await authClient.signIn.email(
       {
         email,
         password,
@@ -56,24 +55,24 @@ export default function AuthScreen() {
         onSuccess: () => {
           router.replace("/(protected)/(tabs)/(home)");
         },
-      }
+      },
     );
     setLoading(false);
   };
 
   const handleSignUp = async () => {
     if (!email || !password || !name) {
-      Alert.alert('Error', 'Please fill in all required fields');
+      Alert.alert("Error", "Please fill in all required fields");
       return;
     }
 
     if (password !== confirmPassword) {
-      Alert.alert('Error', 'Passwords do not match');
+      Alert.alert("Error", "Passwords do not match");
       return;
     }
 
     setLoading(true);
-    const res = await authClient.signUp.email(
+    await authClient.signUp.email(
       {
         email,
         password,
@@ -87,33 +86,33 @@ export default function AuthScreen() {
         onSuccess: () => {
           router.replace("/(protected)/(tabs)/(home)");
         },
-      }
+      },
     );
-    console.log(res);
     setLoading(false);
   };
 
   const handleSubmit = () => {
-    if (mode === 'login') {
+    if (mode === "login") {
       handleSignIn();
-    } else {
+    }
+    else {
       handleSignUp();
     }
   };
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
       <StatusBar style="dark" />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.header}>
-          <Text style={styles.title}>{mode === 'login' ? 'Welcome Back' : 'Create Account'}</Text>
+          <Text style={styles.title}>{mode === "login" ? "Welcome Back" : "Create Account"}</Text>
           <Text style={styles.subtitle}>
-            {mode === 'login'
-              ? 'Sign in to continue'
-              : 'Sign up to get started'}
+            {mode === "login"
+              ? "Sign in to continue"
+              : "Sign up to get started"}
           </Text>
         </View>
 
@@ -131,7 +130,7 @@ export default function AuthScreen() {
             />
           </View>
 
-          {mode === 'signup' && (
+          {mode === "signup" && (
             <View style={styles.inputContainer}>
               <Text style={styles.label}>Name</Text>
               <TextInput
@@ -168,7 +167,7 @@ export default function AuthScreen() {
             </View>
           </View>
 
-          {mode === 'signup' && (
+          {mode === "signup" && (
             <View style={styles.inputContainer}>
               <Text style={styles.label}>Confirm Password</Text>
               <TextInput
@@ -188,22 +187,24 @@ export default function AuthScreen() {
             disabled={loading}
             testID="submit-button"
           >
-            {loading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text style={styles.buttonText}>
-                {mode === 'login' ? 'Sign In' : 'Sign Up'}
-              </Text>
-            )}
+            {loading
+              ? (
+                  <ActivityIndicator color="#fff" />
+                )
+              : (
+                  <Text style={styles.buttonText}>
+                    {mode === "login" ? "Sign In" : "Sign Up"}
+                  </Text>
+                )}
           </TouchableOpacity>
 
           <View style={styles.footer}>
             <Text style={styles.footerText}>
-              {mode === 'login' ? "Don't have an account? " : 'Already have an account? '}
+              {mode === "login" ? "Don't have an account? " : "Already have an account? "}
             </Text>
             <TouchableOpacity onPress={toggleMode} testID="toggle-mode-button">
               <Text style={styles.footerLink}>
-                {mode === 'login' ? 'Sign Up' : 'Sign In'}
+                {mode === "login" ? "Sign Up" : "Sign In"}
               </Text>
             </TouchableOpacity>
           </View>
@@ -216,11 +217,11 @@ export default function AuthScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   scrollContainer: {
     flexGrow: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     padding: 20,
   },
   header: {
@@ -228,17 +229,17 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 8,
-    textAlign: 'center',
+    textAlign: "center",
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
-    textAlign: 'center',
+    color: "#666",
+    textAlign: "center",
   },
   form: {
-    width: '100%',
+    width: "100%",
   },
   inputContainer: {
     marginBottom: 20,
@@ -246,53 +247,53 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     marginBottom: 8,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: "#f9f9f9",
   },
   passwordContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   passwordInput: {
     flex: 1,
   },
   passwordVisibilityButton: {
-    position: 'absolute',
+    position: "absolute",
     right: 12,
-    height: '100%',
-    justifyContent: 'center',
+    height: "100%",
+    justifyContent: "center",
   },
   button: {
-    backgroundColor: '#007AFF',
+    backgroundColor: "#007AFF",
     borderRadius: 8,
     padding: 15,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 10,
   },
   buttonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   footer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
     marginTop: 20,
   },
   footerText: {
-    color: '#666',
+    color: "#666",
     fontSize: 14,
   },
   footerLink: {
-    color: '#007AFF',
+    color: "#007AFF",
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });

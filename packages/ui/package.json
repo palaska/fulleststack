@@ -14,12 +14,13 @@
     "tamagui": "^1.126.5"
   },
   "peerDependencies": {
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
+    "react": ">=18.3.1",
+    "react-dom": ">=18.3.1"
   },
   "devDependencies": {
     "@types/node": "workspace:*",
     "@types/react": ">=18.0.0",
+    "@fulleststack/eslint-config": "workspace:^",
     "typescript": "workspace:*"
   }
 }

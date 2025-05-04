@@ -1,3 +1,9 @@
-import config from "@fulleststack/eslint-config";
+import createConfig from "@fulleststack/eslint-config/create-config";
 
-export default config;
+export default createConfig({
+  react: true,
+}, {
+  rules: {
+    "unicorn/filename-case": "off",
+  },
+});

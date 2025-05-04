@@ -1,18 +1,20 @@
-import { ReactNode } from 'react'
-import { TamaguiProvider } from 'tamagui'
-import { tamaguiConfig } from './config'
+import type { ReactNode } from "react";
 
-export interface UIProviderProps {
-  children: ReactNode
+import { TamaguiProvider } from "tamagui";
+
+import { tamaguiConfig } from "./config";
+
+export type UIProviderProps = {
+  children: ReactNode;
   /**
    * Optional config to extend the default Tamagui config
    */
-  config?: typeof tamaguiConfig
+  config?: typeof tamaguiConfig;
   /**
    * Disable injecting CSS for this provider
    */
-  disableInjectCSS?: boolean
-}
+  disableInjectCSS?: boolean;
+};
 
 export function UIProvider({
   children,
@@ -23,5 +25,5 @@ export function UIProvider({
     <TamaguiProvider config={config} disableInjectCSS={disableInjectCSS}>
       {children}
     </TamaguiProvider>
-  )
+  );
 }
