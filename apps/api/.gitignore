@@ -27,13 +27,11 @@ lerna-debug.log*
 # misc
 .DS_Store
 
-dev.db*
-test.db
+dev.db/*
+!dev.db/.gitkeep
 .vercel
 dist
 .dev.vars
-public
+public/*
+!public/.gitkeep
 .wrangler
-
-dev.db/*
-!dev.db/.gitkeep
