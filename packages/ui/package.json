@@ -4,23 +4,20 @@
   "version": "1.0.0",
   "main": "./dist/index.js",
   "scripts": {
-    "dev": "tsc --watch",
+    "dev": "rm -rf dist && tsc --watch",
     "build": "rm -rf dist && tsc",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@tamagui/config": "^1.126.5",
-    "tamagui": "^1.126.5"
   },
   "peerDependencies": {
     "react": ">=18.3.1",
     "react-dom": ">=18.3.1"
   },
+  "dependencies": {},
   "devDependencies": {
+    "@fulleststack/eslint-config": "workspace:^",
     "@types/node": "workspace:*",
     "@types/react": ">=18.0.0",
-    "@fulleststack/eslint-config": "workspace:^",
     "typescript": "workspace:*"
   }
 }

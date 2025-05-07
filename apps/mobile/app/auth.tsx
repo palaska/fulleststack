@@ -53,7 +53,9 @@ export default function AuthScreen() {
           console.log(ctx);
         },
         onSuccess: () => {
-          router.replace("/(protected)/(tabs)/(home)");
+          setTimeout(() => {
+            router.replace("/(protected)/(tabs)/(home)");
+          });
         },
       },
     );
@@ -84,7 +86,9 @@ export default function AuthScreen() {
           console.log(ctx);
         },
         onSuccess: () => {
-          router.replace("/(protected)/(tabs)/(home)");
+          setTimeout(() => {
+            router.replace("/(protected)/(tabs)/(home)");
+          });
         },
       },
     );
@@ -106,56 +110,47 @@ export default function AuthScreen() {
       style={styles.container}
     >
       <StatusBar style="dark" />
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.header}>
-          <Text style={styles.title}>{mode === "login" ? "Welcome Back" : "Create Account"}</Text>
-          <Text style={styles.subtitle}>
-            {mode === "login"
-              ? "Sign in to continue"
-              : "Sign up to get started"}
-          </Text>
-        </View>
+      <ScrollView style={styles.ScrollView}>
+        <View style={styles.contentContainer}>
+          <View style={styles.headerContainer}>
+            <Text style={styles.heading}>{mode === "login" ? "Welcome Back" : "Create Account"}</Text>
+            <Text style={styles.paragraph}>
+              {mode === "login" ? "Sign in to continue" : "Sign up to get started"}
+            </Text>
+          </View>
 
-        <View style={styles.form}>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Email</Text>
+          <View style={styles.formContainer}>
             <TextInput
               style={styles.input}
-              placeholder="Enter your email"
+              placeholder="Email"
               value={email}
               onChangeText={setEmail}
               autoCapitalize="none"
               keyboardType="email-address"
               testID="email-input"
             />
-          </View>
 
-          {mode === "signup" && (
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Name</Text>
+            {mode === "signup" && (
               <TextInput
                 style={styles.input}
-                placeholder="Enter your name"
+                placeholder="Name"
                 value={name}
                 onChangeText={setName}
                 testID="name-input"
               />
-            </View>
-          )}
+            )}
 
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Password</Text>
             <View style={styles.passwordContainer}>
               <TextInput
-                style={[styles.input, styles.passwordInput]}
-                placeholder="Enter your password"
+                style={styles.input}
+                placeholder="Password"
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry={!showPassword}
                 testID="password-input"
               />
               <TouchableOpacity
-                style={styles.passwordVisibilityButton}
+                style={styles.passwordToggle}
                 onPress={() => setShowPassword(!showPassword)}
               >
                 <Ionicons
@@ -165,48 +160,45 @@ export default function AuthScreen() {
                 />
               </TouchableOpacity>
             </View>
-          </View>
 
-          {mode === "signup" && (
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Confirm Password</Text>
+            {mode === "signup" && (
               <TextInput
                 style={styles.input}
-                placeholder="Confirm your password"
+                placeholder="Confirm Password"
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
                 secureTextEntry={!showPassword}
                 testID="confirm-password-input"
               />
-            </View>
-          )}
+            )}
 
-          <TouchableOpacity
-            style={styles.button}
-            onPress={handleSubmit}
-            disabled={loading}
-            testID="submit-button"
-          >
-            {loading
-              ? (
-                  <ActivityIndicator color="#fff" />
-                )
-              : (
-                  <Text style={styles.buttonText}>
-                    {mode === "login" ? "Sign In" : "Sign Up"}
-                  </Text>
-                )}
-          </TouchableOpacity>
-
-          <View style={styles.footer}>
-            <Text style={styles.footerText}>
-              {mode === "login" ? "Don't have an account? " : "Already have an account? "}
-            </Text>
-            <TouchableOpacity onPress={toggleMode} testID="toggle-mode-button">
-              <Text style={styles.footerLink}>
-                {mode === "login" ? "Sign Up" : "Sign In"}
-              </Text>
+            <TouchableOpacity
+              style={[styles.submitButton, loading && styles.disabledButton]}
+              onPress={handleSubmit}
+              disabled={loading}
+              testID="submit-button"
+            >
+              {loading
+                ? (
+                    <ActivityIndicator color="#fff" />
+                  )
+                : (
+                    <Text style={styles.submitButtonText}>
+                      {mode === "login" ? "Sign In" : "Sign Up"}
+                    </Text>
+                  )}
             </TouchableOpacity>
+
+            <View style={styles.toggleContainer}>
+              <Text style={styles.toggleText}>
+                {mode === "login" ? "Don't have an account?" : "Already have an account?"}
+              </Text>
+              <TouchableOpacity onPress={toggleMode} testID="toggle-mode-button">
+                <Text style={styles.toggleButtonText}>
+                  {mode === "login" ? "Sign Up" : "Sign In"}
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -217,83 +209,77 @@ export default function AuthScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "white",
   },
-  scrollContainer: {
-    flexGrow: 1,
-    justifyContent: "center",
-    padding: 20,
+  ScrollView: {
+    flex: 1,
   },
-  header: {
-    marginBottom: 40,
+  contentContainer: {
+    flex: 1,
+    padding: 24,
+    gap: 24,
   },
-  title: {
-    fontSize: 28,
+  headerContainer: {
+    alignItems: "center",
+    gap: 8,
+  },
+  heading: {
+    fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 8,
-    textAlign: "center",
+    color: "#22C55E",
   },
-  subtitle: {
+  paragraph: {
     fontSize: 16,
     color: "#666",
-    textAlign: "center",
   },
-  form: {
-    width: "100%",
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 16,
-    marginBottom: 8,
-    fontWeight: "500",
+  formContainer: {
+    gap: 16,
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#ccc",
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
-    backgroundColor: "#f9f9f9",
   },
   passwordContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    position: "relative",
   },
-  passwordInput: {
-    flex: 1,
-  },
-  passwordVisibilityButton: {
+  passwordToggle: {
     position: "absolute",
     right: 12,
-    height: "100%",
-    justifyContent: "center",
+    top: 12,
   },
-  button: {
-    backgroundColor: "#007AFF",
+  submitButton: {
+    backgroundColor: "#22C55E",
+    padding: 16,
     borderRadius: 8,
-    padding: 15,
     alignItems: "center",
-    marginTop: 10,
+    justifyContent: "center",
+    marginTop: 8,
   },
-  buttonText: {
-    color: "#fff",
+  disabledButton: {
+    opacity: 0.7,
+  },
+  submitButtonText: {
+    color: "white",
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: "bold",
   },
-  footer: {
+  toggleContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: 20,
+    alignItems: "center",
+    marginTop: 16,
+    gap: 8,
   },
-  footerText: {
-    color: "#666",
+  toggleText: {
     fontSize: 14,
+    color: "#333",
   },
-  footerLink: {
-    color: "#007AFF",
+  toggleButtonText: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: "bold",
+    color: "#22C55E",
   },
 });

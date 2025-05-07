@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "concurrently \"npm run db:dev\" \"npm run app:dev\"",
-    "app:dev": "wrangler dev",
+    "app:dev": "wrangler dev --ip 0.0.0.0",
     "db:dev": "turso dev --db-file dev.db/db",
     "db:push": "drizzle-kit push",
     "db:generate": "drizzle-kit generate",

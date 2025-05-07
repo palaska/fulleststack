@@ -1,5 +1,4 @@
 import { useSession } from "@/lib/auth-client";
-import { UIProvider } from "@fulleststack/ui";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -25,7 +24,7 @@ export default function RootLayout() {
   }
 
   return (
-    <UIProvider>
+    <>
       <StatusBar style="dark" />
       <Stack>
         <Stack.Screen
@@ -43,6 +42,6 @@ export default function RootLayout() {
           }}
         />
       </Stack>
-    </UIProvider>
+    </>
   );
 }
