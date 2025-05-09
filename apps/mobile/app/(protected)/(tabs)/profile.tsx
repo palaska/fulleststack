@@ -1,11 +1,14 @@
-import { signOut } from "@/lib/auth-client";
+import { signOut, useSession } from "@/lib/auth-client";
 import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 
 function ProfilePage() {
+  const { data: session } = useSession();
+
   return (
     <View style={styles.container}>
       <Text>Profile Page</Text>
+      <Text>Hi {session?.user.name}!</Text>
       <Button title="Sign Out" onPress={() => signOut()} />
     </View>
   );

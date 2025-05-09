@@ -13,7 +13,7 @@ export default function RootLayout() {
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
 
-  const { isPending } = useSession();
+  const { data: session, isPending } = useSession();
 
   useEffect(() => {
     if (loaded && !isPending) {
@@ -29,6 +29,7 @@ export default function RootLayout() {
     <>
       <StatusBar style="dark" />
       <Stack>
+        <Stack.Protected guard={!session}>
         <Stack.Screen
           name="auth"
           options={{
@@ -36,6 +37,8 @@ export default function RootLayout() {
             headerShown: false,
           }}
         />
+        </Stack.Protected>
+        <Stack.Protected guard={session !== null}>
         <Stack.Screen
           name="(protected)"
           options={{
@@ -43,6 +46,7 @@ export default function RootLayout() {
             headerShown: false,
           }}
         />
+        </Stack.Protected>
       </Stack>
     </>
   );
