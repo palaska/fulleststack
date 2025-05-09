@@ -1,5 +1,5 @@
 {
-  "name": "@fulleststack/api-client",
+  "name": "@fulleststack/common",
   "type": "module",
   "version": "1.0.0",
   "main": "./dist/index.js",
@@ -9,12 +9,8 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit"
   },
-  "dependencies": {
-    "@fulleststack/api": "workspace:^",
-    "hono": "workspace:*"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@cloudflare/workers-types": "workspace:*",
     "@fulleststack/eslint-config": "workspace:^",
     "@types/node": "workspace:*",
     "typescript": "workspace:*"

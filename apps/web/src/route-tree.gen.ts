@@ -8,13 +8,13 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/~__root'
-import { Route as SignupImport } from './routes/~signup'
-import { Route as SigninImport } from './routes/~signin'
-import { Route as IndexImport } from './routes/~index'
-import { Route as TaskIdImport } from './routes/~task/~$id'
-import { Route as AdminIndexImport } from './routes/~admin/~index'
-import { Route as TaskIdEditImport } from './routes/~task/~$id.edit'
+import { Route as rootRoute } from './routes/__root'
+import { Route as SignupImport } from './routes/signup'
+import { Route as SigninImport } from './routes/signin'
+import { Route as IndexImport } from './routes/index'
+import { Route as AdminIndexImport } from './routes/admin/index'
+import { Route as TaskIdImport } from './routes/task/$id'
+import { Route as TaskIdEditImport } from './routes/task/$id.edit'
 
 // Create/Update Routes
 
@@ -36,15 +36,15 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const TaskIdRoute = TaskIdImport.update({
-  id: '/task/$id',
-  path: '/task/$id',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const AdminIndexRoute = AdminIndexImport.update({
   id: '/admin/',
   path: '/admin/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const TaskIdRoute = TaskIdImport.update({
+  id: '/task/$id',
+  path: '/task/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -79,18 +79,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupImport
       parentRoute: typeof rootRoute
     }
-    '/admin/': {
-      id: '/admin/'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminIndexImport
-      parentRoute: typeof rootRoute
-    }
     '/task/$id': {
       id: '/task/$id'
       path: '/task/$id'
       fullPath: '/task/$id'
       preLoaderRoute: typeof TaskIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminIndexImport
       parentRoute: typeof rootRoute
     }
     '/task/$id/edit': {
@@ -120,8 +120,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
-  '/admin': typeof AdminIndexRoute
   '/task/$id': typeof TaskIdRouteWithChildren
+  '/admin': typeof AdminIndexRoute
   '/task/$id/edit': typeof TaskIdEditRoute
 }
 
@@ -129,8 +129,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
-  '/admin': typeof AdminIndexRoute
   '/task/$id': typeof TaskIdRouteWithChildren
+  '/admin': typeof AdminIndexRoute
   '/task/$id/edit': typeof TaskIdEditRoute
 }
 
@@ -139,8 +139,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
-  '/admin/': typeof AdminIndexRoute
   '/task/$id': typeof TaskIdRouteWithChildren
+  '/admin/': typeof AdminIndexRoute
   '/task/$id/edit': typeof TaskIdEditRoute
 }
 
@@ -150,18 +150,18 @@ export interface FileRouteTypes {
     | '/'
     | '/signin'
     | '/signup'
-    | '/admin'
     | '/task/$id'
+    | '/admin'
     | '/task/$id/edit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/signin' | '/signup' | '/admin' | '/task/$id' | '/task/$id/edit'
+  to: '/' | '/signin' | '/signup' | '/task/$id' | '/admin' | '/task/$id/edit'
   id:
     | '__root__'
     | '/'
     | '/signin'
     | '/signup'
-    | '/admin/'
     | '/task/$id'
+    | '/admin/'
     | '/task/$id/edit'
   fileRoutesById: FileRoutesById
 }
@@ -170,16 +170,16 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SigninRoute: typeof SigninRoute
   SignupRoute: typeof SignupRoute
-  AdminIndexRoute: typeof AdminIndexRoute
   TaskIdRoute: typeof TaskIdRouteWithChildren
+  AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SigninRoute: SigninRoute,
   SignupRoute: SignupRoute,
-  AdminIndexRoute: AdminIndexRoute,
   TaskIdRoute: TaskIdRouteWithChildren,
+  AdminIndexRoute: AdminIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -190,35 +190,35 @@ export const routeTree = rootRoute
 {
   "routes": {
     "__root__": {
-      "filePath": "~__root.tsx",
+      "filePath": "__root.tsx",
       "children": [
         "/",
         "/signin",
         "/signup",
-        "/admin/",
-        "/task/$id"
+        "/task/$id",
+        "/admin/"
       ]
     },
     "/": {
-      "filePath": "~index.tsx"
+      "filePath": "index.tsx"
     },
     "/signin": {
-      "filePath": "~signin.tsx"
+      "filePath": "signin.tsx"
     },
     "/signup": {
-      "filePath": "~signup.tsx"
-    },
-    "/admin/": {
-      "filePath": "~admin/~index.tsx"
+      "filePath": "signup.tsx"
     },
     "/task/$id": {
-      "filePath": "~task/~$id.tsx",
+      "filePath": "task/$id.tsx",
       "children": [
         "/task/$id/edit"
       ]
     },
+    "/admin/": {
+      "filePath": "admin/index.tsx"
+    },
     "/task/$id/edit": {
-      "filePath": "~task/~$id.edit.tsx",
+      "filePath": "task/$id.edit.tsx",
       "parent": "/task/$id"
     }
   }

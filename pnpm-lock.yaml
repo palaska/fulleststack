@@ -257,6 +257,9 @@ importers:
       '@fulleststack/api-client':
         specifier: workspace:^
         version: link:../../packages/api-client
+      '@fulleststack/common':
+        specifier: workspace:^
+        version: link:../../packages/common
       '@fulleststack/ui':
         specifier: workspace:^
         version: link:../../packages/ui
@@ -355,6 +358,18 @@ importers:
       '@cloudflare/workers-types':
         specifier: ^4.20241205.0
         version: 4.20250428.0
+      '@fulleststack/eslint-config':
+        specifier: workspace:^
+        version: link:../eslint-config
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.15.3
+      typescript:
+        specifier: 5.8.3
+        version: 5.8.3
+
+  packages/common:
+    devDependencies:
       '@fulleststack/eslint-config':
         specifier: workspace:^
         version: link:../eslint-config
