@@ -29,23 +29,23 @@ export default function RootLayout() {
     <>
       <StatusBar style="dark" />
       <Stack>
-        <Stack.Protected guard={!session}>
-        <Stack.Screen
-          name="auth"
-          options={{
-            animation: "none",
-            headerShown: false,
-          }}
-        />
-        </Stack.Protected>
         <Stack.Protected guard={session !== null}>
-        <Stack.Screen
-          name="(protected)"
-          options={{
-            animation: "none",
-            headerShown: false,
-          }}
-        />
+          <Stack.Screen
+            name="(protected)"
+            options={{
+              animation: "none",
+              headerShown: false,
+            }}
+          />
+        </Stack.Protected>
+        <Stack.Protected guard={session === null}>
+          <Stack.Screen
+            name="auth"
+            options={{
+              animation: "none",
+              headerShown: false,
+            }}
+          />
         </Stack.Protected>
       </Stack>
     </>
