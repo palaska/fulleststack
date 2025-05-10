@@ -4,15 +4,17 @@
   "private": true,
   "main": "expo-router/entry",
   "scripts": {
-    "upgrade-expo": "pnpm add expo@latest && expo install --fix",
+    "typecheck": "tsc --noEmit",
+    "lint": "expo lint",
+    "clean": "rm -rf dist",
     "dev": "node ./scripts/start-expo.js",
+    "upgrade-expo": "pnpm add expo@latest && expo install --fix",
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "test": "jest --watchAll",
-    "lint": "expo lint"
+    "test": "jest --watchAll"
   },
   "jest": {
     "preset": "jest-expo"

@@ -4,10 +4,11 @@
   "version": "1.0.0",
   "main": "./dist/index.js",
   "scripts": {
-    "dev": "rm -rf dist && tsc --watch",
-    "build": "rm -rf dist && tsc",
-    "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "build": "tsc",
+    "lint": "eslint .",
+    "dev": "tsc --watch",
     "test": "jest"
   },
   "dependencies": {},
