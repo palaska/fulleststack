@@ -4,11 +4,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "typecheck": "tsc --noEmit"
+    "dev": "vite",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@fulleststack/api": "workspace:^",

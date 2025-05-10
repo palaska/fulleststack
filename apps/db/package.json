@@ -1,0 +1,13 @@
+{
+  "name": "@fulleststack/db",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "turso dev --db-file data/dev.db"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "turso": "^0.1.0"
+  }
+}

@@ -2,12 +2,15 @@
   "name": "fulleststack",
   "version": "1.0.0",
   "license": "MIT",
+  "packageManager": "pnpm@10.10.0",
   "scripts": {
-    "dev": "pnpm run -r --parallel --aggregate-output dev",
-    "build": "pnpm run -r build",
-    "test": "pnpm run -r --parallel test",
-    "lint": "pnpm run -r --parallel lint",
-    "deploy": "pnpm build && pnpm run -r deploy",
+    "typecheck": "turbo typecheck",
+    "build": "turbo build",
+    "clean": "turbo clean",
+    "dev": "turbo dev",
+    "test": "turbo test",
+    "lint": "turbo lint",
+    "deploy": "turbo run deploy",
     "check-versions": "node scripts/check-versions.js",
     "find-dep-version": "node scripts/find-compatible-version.js",
     "syncpack:fix": "syncpack fix-mismatches",
@@ -16,7 +19,8 @@
   },
   "devDependencies": {
     "semver": "^7.7.1",
-    "syncpack": "^13.0.4"
+    "syncpack": "^13.0.4",
+    "turbo": "^2.5.3"
   },
   "pnpm": {
     "overrides": {

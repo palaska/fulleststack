@@ -27,8 +27,6 @@ lerna-debug.log*
 # misc
 .DS_Store
 
-dev.db/*
-!dev.db/.gitkeep
 .vercel
 dist
 .dev.vars
