@@ -1,16 +1,19 @@
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
-import type { Session, User } from "../lib/auth-client";
-
-import AppNavbar from "../components/app-navbar";
+import AppNavbar from "../components/AppNavbar";
+import type { User, Session } from "@/web/lib/auth-client";
 
 type AppContext = {
-  session?: Session;
-  user?: User;
+  auth: {
+    user: User | null;
+    session: Session | null;
+    isPending: boolean;
+    isLoggedIn: boolean;
+    isAdmin: boolean;
+  }
 };
 
-// Better-Auth session context type
 export const Route = createRootRouteWithContext<AppContext>()({
   component: () => (
     <>

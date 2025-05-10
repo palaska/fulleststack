@@ -1,12 +1,10 @@
-import { signOut, useSession } from "@/web/lib/auth-client";
+import { signOut } from "@/web/lib/auth-client";
 import { Link, useLocation } from "@tanstack/react-router";
+import { useAuth } from "@/web/hooks/useAuth";
 
 export default function AppNavbar() {
   const location = useLocation();
-  const { data: session, isPending } = useSession();
-
-  // Check if user is an admin
-  const isAdmin = session?.user && "role" in session.user && session.user.role === "admin";
+  const { isLoggedIn, isAdmin, user, isPending } = useAuth();
 
   return (
     <nav className="container">
@@ -19,18 +17,22 @@ export default function AppNavbar() {
             <Link to="/">Home</Link>
           </li>
         )}
-        {!isPending && session?.user && (
+        {!isLoggedIn && (
           <>
-            {/* Show Admin link only to admin users */}
+            <li>
+              <Link to="/profile" className="contrast">Profile</Link>
+            </li>
             {isAdmin && (
               <li>
-                <Link to="/admin" className="contrast">Admin</Link>
+                <Link to="/admin-dashboard" className="contrast">Admin Dashboard</Link>
               </li>
             )}
             <li className="user-avatar">
-              <img src={session.user.image || ""} alt={session.user.name || "User"} />
-              <p>{session.user.name}</p>
-            </li>
+              {user?.image && (
+                <img src={user.image} alt={user.name || "User"} />
+              )}
+                <p>{user!.name}</p>
+                </li>
             <li>
               <button
                 type="button"

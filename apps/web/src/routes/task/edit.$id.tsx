@@ -4,13 +4,13 @@ import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 
-import RoutePending from "@/web/components/route-pending";
-import { createTaskQueryOptions, deleteTask, queryKeys, updateTask } from "@/web/lib/queries";
+import RoutePending from "@/web/components/RoutePending";
+import { getTaskQueryOptions, deleteTask, queryKeys, updateTask } from "@/web/lib/queries";
 import queryClient from "@/web/lib/query-client";
 
-export const Route = createFileRoute("/task/$id/edit")({
+export const Route = createFileRoute("/task/edit/$id")({
   loader: ({ params }) =>
-    queryClient.ensureQueryData(createTaskQueryOptions(params.id)),
+    queryClient.ensureQueryData(getTaskQueryOptions(params.id)),
   component: RouteComponent,
   pendingComponent: RoutePending,
 });
@@ -18,7 +18,7 @@ export const Route = createFileRoute("/task/$id/edit")({
 function RouteComponent() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
-  const { data } = useSuspenseQuery(createTaskQueryOptions(id));
+  const { data } = useSuspenseQuery(getTaskQueryOptions(id));
 
   const {
     register,
