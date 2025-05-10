@@ -11,8 +11,8 @@ export default createConfig({
     "antfu/top-level-function": "off",
     "@tanstack/query/exhaustive-deps": "error",
     "unicorn/filename-case": ["error", {
-      case: "kebabCase",
-      ignore: ["README.md", "~__root.tsx"],
+      cases: ["kebabCase", "pascalCase"],
+      ignore: ["README.md", "__root.tsx"],
     }],
   },
 });

@@ -20,7 +20,7 @@ export const tasksQueryOptions = queryOptions({
   },
 });
 
-export const createTaskQueryOptions = (id: string) => queryOptions({
+export const getTaskQueryOptions = (id: string) => queryOptions({
   ...queryKeys.LIST_TASK(id),
   queryFn: async () => {
     const response = await apiClient.api.tasks[":id"].$get({
