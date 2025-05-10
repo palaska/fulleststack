@@ -8,12 +8,14 @@ Features:
 - Hono API [proxied with vite](./apps/web/vite.config.ts) during development
 - Hono [RPC client](packages/api-client/src/index.ts) built during development for faster inference
 - Shared Zod validators with drizzle-zod
-- Shared eslint config
+- Shared eslint config using `@antfu/eslint-config`
 - Shared tsconfig
+- Shared UI components in `packages/ui`
+- Expo mobile application with NativeWind (Tailwind CSS for React Native)
 
 Tech Stack:
 
-- api
+- api (`apps/api`)
   - hono
   - hono openapi
   - better-auth
@@ -21,23 +23,37 @@ Tech Stack:
   - drizzle
   - drizzle-zod
   - turso
-- web
+- web (`apps/web`)
   - react
   - vite
   - react-hook-form
   - tanstack router
+  - tanstack query
+- mobile (`apps/mobile`)
+  - react-native
+  - expo
+  - expo router
+  - nativewind
 - dev tooling
   - typescript
   - eslint with `@antfu/eslint-config`
+  - turbo
+  - syncpack
 
 Tour:
 
 - Base [tsconfig.json](./tsconfig.json) with default settings lives in the root
 - Shared packages live in [/packages] directory
-  - Base [eslint.config.js](./packages/eslint-config/eslint.config.js) with default settings
+  - `api-client`: Hono RPC client for type-safe API communication.
+  - `common`: Shared utilities and types.
+  - `eslint-config`: Shared ESLint configuration based on `@antfu/eslint-config`.
+  - `ui`: Shared React UI components.
+- Base [eslint.config.js](./packages/eslint-config/eslint.config.js) with default settings
 - Applications live in [/apps] directory
-  - Use any cli to create new apps in here
-  - If cloning a git repo in here be sure to delete the `.git` folder so it is not treated as a submodule
+  - `api`: Hono backend application deployed to Cloudflare Workers, using Drizzle ORM with Turso.
+  - `db`: Contains a local Turso development database setup and data.
+  - `mobile`: Expo (React Native) mobile application.
+  - `web`: React/Vite frontend application.
 
 > All pnpm commands are run from the root of the repo.
 
@@ -61,14 +77,16 @@ Update the values in the `.dev.vars` file with your Turso credentials.
 
 ### Run DB migrations locally
 
+This command applies migrations to your local Turso database if you are using `turso dev` or a local libSQL file.
+If you are using a remote Turso dev database, configure `apps/api/drizzle.config.ts` accordingly or use the production migration command.
 ```sh
-pnpm run -r db:push
+pnpm --filter api db:push
 ```
 
 ### Start Apps
 
 ```sh
-pnpm run dev
+pnpm dev
 ```
 
 Visit [http://localhost:5173](http://localhost:5173)
@@ -79,8 +97,9 @@ All requests to `/api` will be proxied to the hono server running on [http://loc
 
 ### Run DB migrations on Turso
 
+This command applies migrations to your production Turso database. Ensure `apps/api/drizzle.config.ts` is configured for your production database.
 ```sh
-pnpm run -r db:push
+pnpm --filter api db:push
 ```
 
 ### Deploy
@@ -94,17 +113,17 @@ pnpm run deploy
 ### Lint
 
 ```sh
-pnpm run lint
+pnpm lint
 ```
 
 ### Test
 
 ```sh
-pnpm run test
+pnpm test
 ```
 
 ### Build
 
 ```sh
-pnpm run build
+pnpm build
 ```
