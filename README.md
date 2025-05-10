@@ -8,6 +8,7 @@ Features:
 - Hono API [proxied with vite](./apps/web/vite.config.ts) during development
 - Hono [RPC client](packages/api-client/src/index.ts) built during development for faster inference
 - Shared Zod validators with drizzle-zod
+- Authentication handled by `better-auth` (email/password, OAuth providers)
 - Shared eslint config using `@antfu/eslint-config`
 - Shared tsconfig
 - Shared UI components in `packages/ui`
@@ -29,11 +30,13 @@ Tech Stack:
   - react-hook-form
   - tanstack router
   - tanstack query
+  - `better-auth` client for web authentication
 - mobile (`apps/mobile`)
   - react-native
   - expo
   - expo router
   - nativewind
+  - `@better-auth/expo` for native authentication
 - dev tooling
   - typescript
   - eslint with `@antfu/eslint-config`
@@ -51,9 +54,12 @@ Tour:
 - Base [eslint.config.js](./packages/eslint-config/eslint.config.js) with default settings
 - Applications live in [/apps] directory
   - `api`: Hono backend application deployed to Cloudflare Workers, using Drizzle ORM with Turso.
+    - Features `better-auth` for authentication, configured in `src/lib/better-auth.config.ts`. Auth-related database schema is generated via `pnpm --filter api generate-auth-schema`.
   - `db`: Contains a local Turso development database setup and data.
   - `mobile`: Expo (React Native) mobile application.
+    - Uses `@better-auth/expo` for native authentication flows, integrating with the API's `better-auth` setup.
   - `web`: React/Vite frontend application.
+    - Integrates with `better-auth` for authentication, complementing the API setup.
 
 > All pnpm commands are run from the root of the repo.
 
