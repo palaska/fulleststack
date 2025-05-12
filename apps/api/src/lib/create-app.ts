@@ -39,14 +39,16 @@ export default function createApp() {
     cors({
       origin: trustedOrigins,
       allowHeaders: ["Content-Type", "Authorization"],
-      allowMethods: ["POST", "GET", "OPTIONS"],
+      allowMethods: ["POST", "GET", "OPTIONS", "DELETE", "PATCH"],
       exposeHeaders: ["Content-Length"],
       maxAge: 600,
       credentials: true,
     }),
   );
 
-  app.use(csrf());
+  app.use(csrf({
+    origin: trustedOrigins,
+  }));
 
   app.use(serveEmojiFavicon("📝"))
     .use(dbMiddleware())

@@ -17,7 +17,7 @@ export default function AppNavbar() {
             <Link to="/">Home</Link>
           </li>
         )}
-        {!isLoggedIn && (
+        {isLoggedIn && (
           <>
             <li>
               <Link to="/profile" className="contrast">Profile</Link>
@@ -27,7 +27,7 @@ export default function AppNavbar() {
                 <Link to="/admin-dashboard" className="contrast">Admin Dashboard</Link>
               </li>
             )}
-            <li className="user-avatar">
+            <li>
               {user?.image && (
                 <img src={user.image} alt={user.name || "User"} />
               )}
