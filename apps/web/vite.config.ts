@@ -12,7 +12,6 @@ export default defineConfig({
   plugins: [
     tsconfigPaths(),
     TanStackRouterVite({
-      routeFilePrefix: "~",
       routeTreeFileHeader: [
         "/* eslint-disable eslint-comments/no-unlimited-disable */",
         "/* eslint-disable */",

@@ -1,5 +1,5 @@
 {
-  "name": "@fulleststack/api-client",
+  "name": "@fulleststack/common",
   "type": "module",
   "version": "1.0.0",
   "main": "./dist/index.js",
@@ -8,16 +8,16 @@
     "clean": "rm -rf dist",
     "build": "tsc",
     "lint": "eslint .",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "test": "jest"
   },
-  "dependencies": {
-    "@fulleststack/api": "workspace:^",
-    "hono": "workspace:*"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@cloudflare/workers-types": "workspace:*",
     "@fulleststack/eslint-config": "workspace:^",
+    "@types/jest": "workspace:*",
     "@types/node": "workspace:*",
+    "jest": "workspace:*",
+    "ts-jest": "workspace:*",
     "typescript": "workspace:*"
   }
 }

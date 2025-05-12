@@ -4,6 +4,7 @@ import { queryOptions } from "@tanstack/react-query";
 
 import apiClient from "./api-client";
 import formatApiError from "./format-api-error";
+import { withParsedDates } from "@fulleststack/common";
 
 export const queryKeys = {
   LIST_TASKS: { queryKey: ["list-tasks"] },
@@ -14,11 +15,12 @@ export const tasksQueryOptions = queryOptions({
   ...queryKeys.LIST_TASKS,
   queryFn: async () => {
     const response = await apiClient.api.tasks.$get();
-    return response.json();
+    const json = await response.json();
+    return withParsedDates(json);
   },
 });
 
-export const createTaskQueryOptions = (id: string) => queryOptions({
+export const getTaskQueryOptions = (id: string) => queryOptions({
   ...queryKeys.LIST_TASK(id),
   queryFn: async () => {
     const response = await apiClient.api.tasks[":id"].$get({
@@ -35,7 +37,7 @@ export const createTaskQueryOptions = (id: string) => queryOptions({
       const message = formatApiError(json);
       throw new Error(message);
     }
-    return json;
+    return withParsedDates(json);
   },
 });
 
@@ -49,7 +51,7 @@ export const createTask = async (task: insertTasksSchema) => {
     const message = formatApiError(json);
     throw new Error(message);
   }
-  return json;
+  return withParsedDates(json);
 };
 
 export const deleteTask = async (id: string) => {

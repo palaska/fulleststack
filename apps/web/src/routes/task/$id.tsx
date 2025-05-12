@@ -1,21 +1,21 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
-import RoutePending from "@/web/components/route-pending";
+import RoutePending from "@/web/components/RoutePending";
 import dateFormatter from "@/web/lib/date-formatter";
-import { createTaskQueryOptions } from "@/web/lib/queries";
+import { getTaskQueryOptions } from "@/web/lib/queries";
 import queryClient from "@/web/lib/query-client";
 
 export const Route = createFileRoute("/task/$id")({
   loader: ({ params }) =>
-    queryClient.ensureQueryData(createTaskQueryOptions(params.id)),
+    queryClient.ensureQueryData(getTaskQueryOptions(params.id)),
   component: RouteComponent,
   pendingComponent: RoutePending,
 });
 
 function RouteComponent() {
   const { id } = Route.useParams();
-  const { data } = useSuspenseQuery(createTaskQueryOptions(id));
+  const { data } = useSuspenseQuery(getTaskQueryOptions(id));
 
   return (
     <article>
@@ -40,7 +40,7 @@ function RouteComponent() {
       <div className="buttons">
         <Link
           role="button"
-          to="/task/$id/edit"
+          to="/task/edit/$id"
           params={{ id }}
           className="contrast outline"
         >

@@ -14,6 +14,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  SafeAreaView,
 } from "react-native";
 
 type AuthMode = "login" | "signup";
@@ -52,11 +53,7 @@ export default function AuthScreen() {
           Alert.alert("Error", ctx.error.message);
           console.log(ctx);
         },
-        onSuccess: () => {
-          setTimeout(() => {
-            router.replace("/(protected)/(tabs)/(home)");
-          });
-        },
+        onSuccess: () => {},
       },
     );
     setLoading(false);
@@ -85,11 +82,7 @@ export default function AuthScreen() {
           Alert.alert("Error", ctx.error.message);
           console.log(ctx);
         },
-        onSuccess: () => {
-          setTimeout(() => {
-            router.replace("/(protected)/(tabs)/(home)");
-          });
-        },
+        onSuccess: () => {},
       },
     );
     setLoading(false);
@@ -105,104 +98,110 @@ export default function AuthScreen() {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-    >
-      <StatusBar style="dark" />
-      <ScrollView style={styles.ScrollView}>
-        <View style={styles.contentContainer}>
-          <View style={styles.headerContainer}>
-            <Text style={styles.heading}>{mode === "login" ? "Welcome Back" : "Create Account"}</Text>
-            <Text style={styles.paragraph}>
-              {mode === "login" ? "Sign in to continue" : "Sign up to get started"}
-            </Text>
-          </View>
-
-          <View style={styles.formContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              value={email}
-              onChangeText={setEmail}
-              autoCapitalize="none"
-              keyboardType="email-address"
-              testID="email-input"
-            />
-
-            {mode === "signup" && (
-              <TextInput
-                style={styles.input}
-                placeholder="Name"
-                value={name}
-                onChangeText={setName}
-                testID="name-input"
-              />
-            )}
-
-            <View style={styles.passwordContainer}>
-              <TextInput
-                style={styles.input}
-                placeholder="Password"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry={!showPassword}
-                testID="password-input"
-              />
-              <TouchableOpacity
-                style={styles.passwordToggle}
-                onPress={() => setShowPassword(!showPassword)}
-              >
-                <Ionicons
-                  name={showPassword ? "eye-off-outline" : "eye-outline"}
-                  size={24}
-                  color="gray"
-                />
-              </TouchableOpacity>
-            </View>
-
-            {mode === "signup" && (
-              <TextInput
-                style={styles.input}
-                placeholder="Confirm Password"
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-                secureTextEntry={!showPassword}
-                testID="confirm-password-input"
-              />
-            )}
-
-            <TouchableOpacity
-              style={[styles.submitButton, loading && styles.disabledButton]}
-              onPress={handleSubmit}
-              disabled={loading}
-              testID="submit-button"
-            >
-              {loading
-                ? (
-                    <ActivityIndicator color="#fff" />
-                  )
-                : (
-                    <Text style={styles.submitButtonText}>
-                      {mode === "login" ? "Sign In" : "Sign Up"}
-                    </Text>
-                  )}
-            </TouchableOpacity>
-
-            <View style={styles.toggleContainer}>
-              <Text style={styles.toggleText}>
-                {mode === "login" ? "Don't have an account?" : "Already have an account?"}
+    <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.keyboardView}
+      >
+        <StatusBar style="dark" />
+        <ScrollView style={styles.ScrollView}>
+          <View style={styles.contentContainer}>
+            <View style={styles.headerContainer}>
+              <Text style={styles.heading}>{mode === "login" ? "Welcome Back" : "Create Account"}</Text>
+              <Text style={styles.paragraph}>
+                {mode === "login" ? "Sign in to continue" : "Sign up to get started"}
               </Text>
-              <TouchableOpacity onPress={toggleMode} testID="toggle-mode-button">
-                <Text style={styles.toggleButtonText}>
-                  {mode === "login" ? "Sign Up" : "Sign In"}
-                </Text>
+            </View>
+
+            <View style={styles.formContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="Email"
+                placeholderTextColor="#666666"
+                value={email}
+                onChangeText={setEmail}
+                autoCapitalize="none"
+                keyboardType="email-address"
+                testID="email-input"
+              />
+
+              {mode === "signup" && (
+                <TextInput
+                  style={styles.input}
+                  placeholder="Name"
+                  placeholderTextColor="#666666"
+                  value={name}
+                  onChangeText={setName}
+                  testID="name-input"
+                />
+              )}
+
+              <View style={styles.passwordContainer}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Password"
+                  placeholderTextColor="#666666"
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry={!showPassword}
+                  testID="password-input"
+                />
+                <TouchableOpacity
+                  style={styles.passwordToggle}
+                  onPress={() => setShowPassword(!showPassword)}
+                >
+                  <Ionicons
+                    name={showPassword ? "eye-off-outline" : "eye-outline"}
+                    size={24}
+                    color="gray"
+                  />
+                </TouchableOpacity>
+              </View>
+
+              {mode === "signup" && (
+                <TextInput
+                  style={styles.input}
+                  placeholder="Confirm Password"
+                  placeholderTextColor="#666666"
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                  secureTextEntry={!showPassword}
+                  testID="confirm-password-input"
+                />
+              )}
+
+              <TouchableOpacity
+                style={[styles.submitButton, loading && styles.disabledButton]}
+                onPress={handleSubmit}
+                disabled={loading}
+                testID="submit-button"
+              >
+                {loading
+                  ? (
+                      <ActivityIndicator color="#fff" />
+                    )
+                  : (
+                      <Text style={styles.submitButtonText}>
+                        {mode === "login" ? "Sign In" : "Sign Up"}
+                      </Text>
+                    )}
               </TouchableOpacity>
+
+              <View style={styles.toggleContainer}>
+                <Text style={styles.toggleText}>
+                  {mode === "login" ? "Don't have an account?" : "Already have an account?"}
+                </Text>
+                <TouchableOpacity onPress={toggleMode} testID="toggle-mode-button">
+                  <Text style={styles.toggleButtonText}>
+                    {mode === "login" ? "Sign Up" : "Sign In"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
@@ -211,6 +210,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
   },
+  keyboardView: {
+    flex: 1,
+  },
   ScrollView: {
     flex: 1,
   },
@@ -218,6 +220,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 24,
     gap: 24,
+    paddingTop: Platform.OS === 'ios' ? 0 : 24,
   },
   headerContainer: {
     alignItems: "center",

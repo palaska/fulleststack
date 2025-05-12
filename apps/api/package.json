@@ -8,15 +8,15 @@
     "./schema": "./src/db/schema.ts"
   },
   "scripts": {
-    "dev": "concurrently \"npm run db:dev\" \"npm run app:dev\"",
-    "app:dev": "wrangler dev --ip 0.0.0.0",
-    "db:dev": "turso dev --db-file dev.db/db",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "build": "wrangler build",
+    "lint": "eslint .",
+    "dev": "wrangler dev --ip 0.0.0.0",
     "db:push": "drizzle-kit push",
     "db:generate": "drizzle-kit generate",
     "generate-auth-schema": "npx @better-auth/cli@latest generate --config ./src/lib/better-auth.config.ts --output ./src/db/auth.schema.ts -y",
     "deploy": "wrangler deploy --minify",
-    "typecheck": "tsc --noEmit",
-    "lint": "eslint .",
     "lint:fix": "npm run lint --fix",
     "test": "cross-env ENVIRONMENT=test vitest"
   },
@@ -39,7 +39,6 @@
     "@cloudflare/workers-types": "workspace:*",
     "@fulleststack/eslint-config": "workspace:^",
     "@types/node": "workspace:*",
-    "concurrently": "^9.1.2",
     "cross-env": "^7.0.3",
     "dotenv": "^16.5.0",
     "drizzle-kit": "0.31.0",
@@ -48,7 +47,6 @@
     "eslint-plugin-format": "1.0.1",
     "tsc-alias": "^1.8.10",
     "tsx": "^4.19.2",
-    "turso": "^0.1.0",
     "typescript": "workspace:*",
     "vitest": "3.1.2",
     "wrangler": "^4.12.0"

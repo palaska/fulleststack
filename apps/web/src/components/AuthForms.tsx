@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import { signIn, signUp } from "@/web/lib/auth-client";
 
-export function SignInForm() {
+export function LoginForm({ redirect = "/" }: { redirect?: string }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -26,11 +26,11 @@ export function SignInForm() {
         setError(result.error.message || "Authentication failed");
       }
       else {
-        navigate({ to: "/" });
+        navigate({ to: redirect });
       }
     }
     catch (err) {
-      setError("An error occurred during sign in");
+      setError("An error occurred during login");
       console.error(err);
     }
     finally {
@@ -62,7 +62,7 @@ export function SignInForm() {
         />
       </div>
       <button type="submit" disabled={isLoading}>
-        {isLoading ? "Signing in..." : "Sign In"}
+        {isLoading ? "Logging in..." : "Login"}
       </button>
     </form>
   );
