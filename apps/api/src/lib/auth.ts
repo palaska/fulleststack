@@ -21,9 +21,6 @@ export function configureAuth(db: Db) {
     trustedOrigins,
     emailAndPassword: {
       enabled: true,
-      signUp: {
-        enabled: true,
-      },
     },
     plugins: [
       admin(),
