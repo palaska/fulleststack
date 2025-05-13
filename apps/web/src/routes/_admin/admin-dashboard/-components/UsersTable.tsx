@@ -1,0 +1,80 @@
+import type { UserWithRole } from "better-auth/plugins/admin";
+import { Avatar, Badge, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Pagination, PaginationGap, PaginationList, PaginationNext, PaginationPage, PaginationPrevious } from "@/web/components";
+import { generatePaginationItems } from "@/web/lib/pagination";
+import { useMemo } from "react";
+import { cn } from "@/web/lib/utils";
+import clsx from "clsx";
+
+export function UsersTable({ users, page, totalPages, usersPerPage }: { users: UserWithRole[]; page: number; totalPages: number; usersPerPage: number; }) {
+  const paginationItems = useMemo(() => generatePaginationItems({ currentPage: page, totalPages }), [page, totalPages]);
+  return (
+    <>
+    <Table className={"[--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]"} style={{ minHeight: `${41 + usersPerPage * 81}px` }}>
+      <TableHead>
+        <TableRow>
+          <TableHeader>Name</TableHeader>
+          <TableHeader>Role</TableHeader>
+          <TableHeader>Status</TableHeader>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {users.map(user => (
+          <TableRow key={user.id}>
+            <TableCell>
+              <div className="flex items-center gap-4">
+                <Avatar src={user.image} initials={!user.image ? user.name?.charAt(0) : undefined} className="size-12" />
+                <div>
+                  <div className="font-medium">{user.name}</div>
+                  <div className="text-zinc-500">
+                    <a href="#" className="hover:text-zinc-700">
+                      {user.email}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </TableCell>
+            <TableCell className="text-zinc-500">{user.role}</TableCell>
+            <TableCell>
+              {Math.random() > 0.5 ? <Badge color="lime">Online</Badge> : <Badge color="zinc">Offline</Badge>}
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+    <Pagination className="mt-6">
+        <PaginationPrevious
+          {...(page > 1 ? {
+            search: {
+              page: page - 1,
+            },
+          } : {})}
+        />
+        <PaginationList>
+          {paginationItems.map((item, index) => {
+            if (item.type === 'gap') {
+              return <PaginationGap key={`gap-${index}`} />;
+            }
+            return (
+              <PaginationPage
+                key={`page-${item.pageNumber}`}
+                search={{
+                  page: item.pageNumber,
+                }}
+                current={item.pageNumber === page}
+              >
+                {item.pageNumber}
+              </PaginationPage>
+            );
+          })}
+        </PaginationList>
+        <PaginationNext
+          {...(page < totalPages ? {
+            search: {
+              page: page + 1,
+            },
+          } : {})}
+        />
+      </Pagination>
+      </>
+  );
+}

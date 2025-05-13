@@ -1,5 +1,7 @@
-import { routeTree } from "@/web/route-tree.gen";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
+
+import { routeTree } from "@/web/route-tree.gen";
+
 import { useAuth } from "./hooks/useAuth";
 
 const router = createRouter({
@@ -24,7 +26,12 @@ declare module "@tanstack/react-router" {
 
 export default function App() {
   const { user, session, isPending, isLoggedIn, isAdmin } = useAuth();
-  return <RouterProvider router={router} context={{
-    auth: { user, session, isPending, isLoggedIn, isAdmin }
-  }} />;
+  return (
+    <RouterProvider
+      router={router}
+      context={{
+        auth: { user, session, isPending, isLoggedIn, isAdmin },
+      }}
+    />
+  );
 }

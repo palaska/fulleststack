@@ -1,4 +1,4 @@
-import { useSession } from '../lib/auth-client';
+import { useSession } from "../lib/auth-client";
 
 /**
  * Enhanced auth hook that extends useSession with additional fields
@@ -6,7 +6,7 @@ import { useSession } from '../lib/auth-client';
  */
 export function useAuth() {
   const _session = useSession();
-  const { user, session } = _session.data ? _session.data : { session: null, user: null }
+  const { user, session } = _session.data ? _session.data : { session: null, user: null };
 
   return {
     // Original session properties
@@ -18,6 +18,6 @@ export function useAuth() {
 
     // Additional convenience properties
     isLoggedIn: !!user,
-    isAdmin: user?.role === 'admin',
+    isAdmin: user?.role === "admin",
   };
 }

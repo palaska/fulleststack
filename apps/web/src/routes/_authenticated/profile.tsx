@@ -1,4 +1,3 @@
-import ProfileEdit from "@/web/components/ProfileEdit";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/profile")({
@@ -6,5 +5,5 @@ export const Route = createFileRoute("/_authenticated/profile")({
 });
 
 function Profile() {
-  return <ProfileEdit />;
+  return <div>Profile</div>;
 }

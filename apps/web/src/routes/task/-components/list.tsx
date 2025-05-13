@@ -1,10 +1,10 @@
 import type { selectTasksSchema } from "@fulleststack/api/schema";
 
-import { CheckIcon, XMarkIcon } from '@heroicons/react/20/solid'
+import { CheckIcon, XMarkIcon } from "@heroicons/react/20/solid";
 import { Link } from "@tanstack/react-router";
 
 function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function TaskList({ tasks }: { tasks: selectTasksSchema[] }) {
@@ -14,15 +14,17 @@ export default function TaskList({ tasks }: { tasks: selectTasksSchema[] }) {
         {tasks.map(({ id, name, done, createdAt }, taskIdx) => (
           <li key={id}>
             <div className="relative pb-8">
-              {taskIdx !== tasks.length - 1 ? (
-                <span aria-hidden="true" className="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200" />
-              ) : null}
+              {taskIdx !== tasks.length - 1
+                ? (
+                    <span aria-hidden="true" className="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200" />
+                  )
+                : null}
               <div className="relative flex space-x-3">
                 <div>
                   <span
                     className={classNames(
-                      done ? "bg-green-500" : "bg-gray-400",
-                      'flex size-8 items-center justify-center rounded-full ring-8 ring-white',
+                      done ? "bg-green-700" : "bg-gray-400",
+                      "flex size-8 items-center justify-center rounded-full ring-8 ring-white",
                     )}
                   >
                     {done ? <CheckIcon aria-hidden="true" className="size-5 text-white" /> : <XMarkIcon aria-hidden="true" className="size-5 text-white" />}
@@ -44,5 +46,5 @@ export default function TaskList({ tasks }: { tasks: selectTasksSchema[] }) {
         ))}
       </ul>
     </div>
-  )
+  );
 }
