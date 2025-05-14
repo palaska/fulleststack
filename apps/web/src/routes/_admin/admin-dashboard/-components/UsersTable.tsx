@@ -2,8 +2,6 @@ import type { UserWithRole } from "better-auth/plugins/admin";
 import { Avatar, Badge, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Pagination, PaginationGap, PaginationList, PaginationNext, PaginationPage, PaginationPrevious } from "@/web/components";
 import { generatePaginationItems } from "@/web/lib/pagination";
 import { useMemo } from "react";
-import { cn } from "@/web/lib/utils";
-import clsx from "clsx";
 
 export function UsersTable({ users, page, totalPages, usersPerPage }: { users: UserWithRole[]; page: number; totalPages: number; usersPerPage: number; }) {
   const paginationItems = useMemo(() => generatePaginationItems({ currentPage: page, totalPages }), [page, totalPages]);
@@ -42,13 +40,8 @@ export function UsersTable({ users, page, totalPages, usersPerPage }: { users: U
       </TableBody>
     </Table>
     <Pagination className="mt-6">
-        <PaginationPrevious
-          {...(page > 1 ? {
-            search: {
-              page: page - 1,
-            },
-          } : {})}
-        />
+      <PaginationPrevious search={{ page: Math.max(1, page - 1) }} disabled={page <= 1} preload="intent" />
+
         <PaginationList>
           {paginationItems.map((item, index) => {
             if (item.type === 'gap') {
@@ -57,9 +50,7 @@ export function UsersTable({ users, page, totalPages, usersPerPage }: { users: U
             return (
               <PaginationPage
                 key={`page-${item.pageNumber}`}
-                search={{
-                  page: item.pageNumber,
-                }}
+                search={{ page: item.pageNumber }}
                 current={item.pageNumber === page}
               >
                 {item.pageNumber}
@@ -67,13 +58,7 @@ export function UsersTable({ users, page, totalPages, usersPerPage }: { users: U
             );
           })}
         </PaginationList>
-        <PaginationNext
-          {...(page < totalPages ? {
-            search: {
-              page: page + 1,
-            },
-          } : {})}
-        />
+        <PaginationNext search={{ page: Math.min(totalPages, page + 1) }} disabled={page >= totalPages} preload="intent" />
       </Pagination>
       </>
   );

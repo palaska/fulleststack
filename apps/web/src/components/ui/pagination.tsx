@@ -2,10 +2,11 @@ import type React from "react";
 
 import clsx from "clsx";
 
+import type { LinkProps } from "./button";
 import { Button } from "./button";
-import { Link } from "./link"
 
-type SearchProp = React.ComponentProps<typeof Link>['search'];
+type PaginationPrevNextProps = Omit<LinkProps, "color"> & { className?: string; children?: string | number };
+type PaginationPageProps = Omit<LinkProps, "color"> & { className?: string; children?: string | number; current?: boolean };
 
 export function Pagination({
   "aria-label": ariaLabel = "Page navigation",
@@ -16,13 +17,14 @@ export function Pagination({
 }
 
 export function PaginationPrevious({
-  search = null,
   className,
+  to = ".",
   children = "Previous",
-}: React.PropsWithChildren<{ search?: SearchProp | null; className?: string }>) {
+  ...props
+}: PaginationPrevNextProps) {
   return (
     <span className={clsx(className, "grow basis-0")}>
-      <Button to={""} {...(search === null ? { disabled: true } : { search })} plain aria-label="Previous page">
+      <Button plain to={to} {...props} aria-label="Previous page">
         <svg className="stroke-current" data-slot="icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
           <path
             d="M2.75 8H13.25M2.75 8L5.25 5.5M2.75 8L5.25 10.5"
@@ -38,13 +40,14 @@ export function PaginationPrevious({
 }
 
 export function PaginationNext({
-  search = null,
   className,
   children = "Next",
-}: React.PropsWithChildren<{ search?: SearchProp | null; className?: string }>) {
+  to = ".",
+  ...props
+}: PaginationPrevNextProps) {
   return (
     <span className={clsx(className, "flex grow basis-0 justify-end")}>
-      <Button to={""} {...(search === null ? { disabled: true } : { search })} plain aria-label="Next page">
+      <Button plain to={to} {...props} aria-label="Next page">
         {children}
         <svg className="stroke-current" data-slot="icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
           <path
@@ -64,15 +67,16 @@ export function PaginationList({ className, ...props }: React.ComponentProps<"sp
 }
 
 export function PaginationPage({
-  search,
   className,
   current = false,
   children,
-}: React.PropsWithChildren<{ search: SearchProp; className?: string; current?: boolean }>) {
+  to = ".",
+  ...props
+}: PaginationPageProps) {
   return (
     <Button
-      to={""}
-      search={search}
+      to={to}
+      {...props}
       plain
       aria-label={`Page ${children}`}
       aria-current={current ? "page" : undefined}

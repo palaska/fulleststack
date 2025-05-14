@@ -165,7 +165,7 @@ type OurButtonProps = (
   | { color?: never; outline?: never; plain: true }
 ) & { className?: string; children: React.ReactNode };
 type HeadlessButtonProps = Omit<Headless.ButtonProps, "as" | "className">;
-type LinkProps = Omit<React.ComponentProps<typeof Link>, "className">;
+export type LinkProps = Omit<React.ComponentProps<typeof Link>, "className">;
 
 type ButtonProps = OurButtonProps & (
   | HeadlessButtonProps
