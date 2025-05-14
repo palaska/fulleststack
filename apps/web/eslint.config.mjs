@@ -7,11 +7,20 @@ export default createConfig({
   plugins: {
     "@tanstack/query": pluginQuery,
   },
+  settings: {
+    react: {
+      version: "detect",
+    },
+  },
   rules: {
     "antfu/top-level-function": "off",
     "@tanstack/query/exhaustive-deps": "error",
     "unicorn/filename-case": ["error", {
-      cases: ["kebabCase", "pascalCase"],
+      cases: {
+        kebabCase: true,
+        pascalCase: true,
+        camelCase: true,
+      },
       ignore: ["README.md", "__root.tsx"],
     }],
   },

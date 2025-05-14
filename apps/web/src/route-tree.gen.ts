@@ -9,29 +9,18 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as SignupImport } from './routes/signup'
-import { Route as LoginImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated/route'
 import { Route as AdminRouteImport } from './routes/_admin/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as TaskIdImport } from './routes/task/$id'
 import { Route as AuthenticatedProfileImport } from './routes/_authenticated/profile'
-import { Route as AdminAdminDashboardImport } from './routes/_admin/admin-dashboard'
+import { Route as AuthSignupImport } from './routes/_auth/signup'
+import { Route as AuthSigninImport } from './routes/_auth/signin'
+import { Route as AuthForgotPasswordImport } from './routes/_auth/forgot-password'
+import { Route as AdminAdminDashboardIndexImport } from './routes/_admin/admin-dashboard/index'
 import { Route as TaskEditIdImport } from './routes/task/edit.$id'
 
 // Create/Update Routes
-
-const SignupRoute = SignupImport.update({
-  id: '/signup',
-  path: '/signup',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const LoginRoute = LoginImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const AuthenticatedRouteRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
@@ -61,9 +50,27 @@ const AuthenticatedProfileRoute = AuthenticatedProfileImport.update({
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 
-const AdminAdminDashboardRoute = AdminAdminDashboardImport.update({
-  id: '/admin-dashboard',
-  path: '/admin-dashboard',
+const AuthSignupRoute = AuthSignupImport.update({
+  id: '/_auth/signup',
+  path: '/signup',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthSigninRoute = AuthSigninImport.update({
+  id: '/_auth/signin',
+  path: '/signin',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthForgotPasswordRoute = AuthForgotPasswordImport.update({
+  id: '/_auth/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminAdminDashboardIndexRoute = AdminAdminDashboardIndexImport.update({
+  id: '/admin-dashboard/',
+  path: '/admin-dashboard/',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 
@@ -98,26 +105,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRoute
     }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginImport
+    '/_auth/forgot-password': {
+      id: '/_auth/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof AuthForgotPasswordImport
       parentRoute: typeof rootRoute
     }
-    '/signup': {
-      id: '/signup'
+    '/_auth/signin': {
+      id: '/_auth/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof AuthSigninImport
+      parentRoute: typeof rootRoute
+    }
+    '/_auth/signup': {
+      id: '/_auth/signup'
       path: '/signup'
       fullPath: '/signup'
-      preLoaderRoute: typeof SignupImport
+      preLoaderRoute: typeof AuthSignupImport
       parentRoute: typeof rootRoute
-    }
-    '/_admin/admin-dashboard': {
-      id: '/_admin/admin-dashboard'
-      path: '/admin-dashboard'
-      fullPath: '/admin-dashboard'
-      preLoaderRoute: typeof AdminAdminDashboardImport
-      parentRoute: typeof AdminRouteImport
     }
     '/_authenticated/profile': {
       id: '/_authenticated/profile'
@@ -140,17 +147,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TaskEditIdImport
       parentRoute: typeof rootRoute
     }
+    '/_admin/admin-dashboard/': {
+      id: '/_admin/admin-dashboard/'
+      path: '/admin-dashboard'
+      fullPath: '/admin-dashboard'
+      preLoaderRoute: typeof AdminAdminDashboardIndexImport
+      parentRoute: typeof AdminRouteImport
+    }
   }
 }
 
 // Create and export the route tree
 
 interface AdminRouteRouteChildren {
-  AdminAdminDashboardRoute: typeof AdminAdminDashboardRoute
+  AdminAdminDashboardIndexRoute: typeof AdminAdminDashboardIndexRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
-  AdminAdminDashboardRoute: AdminAdminDashboardRoute,
+  AdminAdminDashboardIndexRoute: AdminAdminDashboardIndexRoute,
 }
 
 const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
@@ -171,23 +185,25 @@ const AuthenticatedRouteRouteWithChildren =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof AuthenticatedRouteRouteWithChildren
-  '/login': typeof LoginRoute
-  '/signup': typeof SignupRoute
-  '/admin-dashboard': typeof AdminAdminDashboardRoute
+  '/forgot-password': typeof AuthForgotPasswordRoute
+  '/signin': typeof AuthSigninRoute
+  '/signup': typeof AuthSignupRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/task/$id': typeof TaskIdRoute
   '/task/edit/$id': typeof TaskEditIdRoute
+  '/admin-dashboard': typeof AdminAdminDashboardIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof AuthenticatedRouteRouteWithChildren
-  '/login': typeof LoginRoute
-  '/signup': typeof SignupRoute
-  '/admin-dashboard': typeof AdminAdminDashboardRoute
+  '/forgot-password': typeof AuthForgotPasswordRoute
+  '/signin': typeof AuthSigninRoute
+  '/signup': typeof AuthSignupRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/task/$id': typeof TaskIdRoute
   '/task/edit/$id': typeof TaskEditIdRoute
+  '/admin-dashboard': typeof AdminAdminDashboardIndexRoute
 }
 
 export interface FileRoutesById {
@@ -195,12 +211,13 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_admin': typeof AdminRouteRouteWithChildren
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
-  '/login': typeof LoginRoute
-  '/signup': typeof SignupRoute
-  '/_admin/admin-dashboard': typeof AdminAdminDashboardRoute
+  '/_auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/_auth/signin': typeof AuthSigninRoute
+  '/_auth/signup': typeof AuthSignupRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/task/$id': typeof TaskIdRoute
   '/task/edit/$id': typeof TaskEditIdRoute
+  '/_admin/admin-dashboard/': typeof AdminAdminDashboardIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -208,33 +225,36 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | ''
-    | '/login'
+    | '/forgot-password'
+    | '/signin'
     | '/signup'
-    | '/admin-dashboard'
     | '/profile'
     | '/task/$id'
     | '/task/edit/$id'
+    | '/admin-dashboard'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | ''
-    | '/login'
+    | '/forgot-password'
+    | '/signin'
     | '/signup'
-    | '/admin-dashboard'
     | '/profile'
     | '/task/$id'
     | '/task/edit/$id'
+    | '/admin-dashboard'
   id:
     | '__root__'
     | '/'
     | '/_admin'
     | '/_authenticated'
-    | '/login'
-    | '/signup'
-    | '/_admin/admin-dashboard'
+    | '/_auth/forgot-password'
+    | '/_auth/signin'
+    | '/_auth/signup'
     | '/_authenticated/profile'
     | '/task/$id'
     | '/task/edit/$id'
+    | '/_admin/admin-dashboard/'
   fileRoutesById: FileRoutesById
 }
 
@@ -242,8 +262,9 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
-  LoginRoute: typeof LoginRoute
-  SignupRoute: typeof SignupRoute
+  AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
+  AuthSigninRoute: typeof AuthSigninRoute
+  AuthSignupRoute: typeof AuthSignupRoute
   TaskIdRoute: typeof TaskIdRoute
   TaskEditIdRoute: typeof TaskEditIdRoute
 }
@@ -252,8 +273,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
-  LoginRoute: LoginRoute,
-  SignupRoute: SignupRoute,
+  AuthForgotPasswordRoute: AuthForgotPasswordRoute,
+  AuthSigninRoute: AuthSigninRoute,
+  AuthSignupRoute: AuthSignupRoute,
   TaskIdRoute: TaskIdRoute,
   TaskEditIdRoute: TaskEditIdRoute,
 }
@@ -271,8 +293,9 @@ export const routeTree = rootRoute
         "/",
         "/_admin",
         "/_authenticated",
-        "/login",
-        "/signup",
+        "/_auth/forgot-password",
+        "/_auth/signin",
+        "/_auth/signup",
         "/task/$id",
         "/task/edit/$id"
       ]
@@ -283,7 +306,7 @@ export const routeTree = rootRoute
     "/_admin": {
       "filePath": "_admin/route.tsx",
       "children": [
-        "/_admin/admin-dashboard"
+        "/_admin/admin-dashboard/"
       ]
     },
     "/_authenticated": {
@@ -292,15 +315,14 @@ export const routeTree = rootRoute
         "/_authenticated/profile"
       ]
     },
-    "/login": {
-      "filePath": "login.tsx"
+    "/_auth/forgot-password": {
+      "filePath": "_auth/forgot-password.tsx"
     },
-    "/signup": {
-      "filePath": "signup.tsx"
+    "/_auth/signin": {
+      "filePath": "_auth/signin.tsx"
     },
-    "/_admin/admin-dashboard": {
-      "filePath": "_admin/admin-dashboard.tsx",
-      "parent": "/_admin"
+    "/_auth/signup": {
+      "filePath": "_auth/signup.tsx"
     },
     "/_authenticated/profile": {
       "filePath": "_authenticated/profile.tsx",
@@ -311,6 +333,10 @@ export const routeTree = rootRoute
     },
     "/task/edit/$id": {
       "filePath": "task/edit.$id.tsx"
+    },
+    "/_admin/admin-dashboard/": {
+      "filePath": "_admin/admin-dashboard/index.tsx",
+      "parent": "/_admin"
     }
   }
 }

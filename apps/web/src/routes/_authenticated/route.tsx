@@ -1,19 +1,20 @@
-import { createFileRoute, Outlet, redirect, useLocation, useNavigate } from '@tanstack/react-router'
-import { authClient } from '@/web/lib/auth-client'
-import { useAuth } from '@/web/hooks/useAuth';
-import { useEffect } from 'react';
+import { createFileRoute, Outlet, redirect, useLocation, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 
-export const Route = createFileRoute('/_authenticated')({
+import { useAuth } from "@/web/hooks/useAuth";
+import { authClient } from "@/web/lib/auth-client";
+
+export const Route = createFileRoute("/_authenticated")({
   beforeLoad: async ({ context, location }) => {
     const { auth: { isLoggedIn, isPending } } = context;
 
     if (isPending) {
-      const { data } = await authClient.getSession()
+      const { data } = await authClient.getSession();
       if (!data) {
         throw redirect({
-          to: '/login',
+          to: "/signin",
           search: { redirect: location.href },
-        })
+        });
       }
 
       return;
@@ -21,29 +22,29 @@ export const Route = createFileRoute('/_authenticated')({
 
     if (!isLoggedIn) {
       throw redirect({
-        to: '/login',
+        to: "/signin",
         search: { redirect: location.href },
-      })
+      });
     }
   },
-  component: _Authenticated,
-})
+  component: AuthenticatedLayout,
+});
 
-function _Authenticated() {
+function AuthenticatedLayout() {
   const { isLoggedIn, isPending } = useAuth();
   const navigate = useNavigate();
   const redirect = useLocation({
-    select: (location) => location.search.redirect,
-  })
+    select: location => location.search.redirect,
+  });
 
   useEffect(() => {
     if (!isPending && !isLoggedIn) {
       navigate({
-        to: '/login',
+        to: "/signin",
         search: { redirect },
       });
     }
   }, [isLoggedIn, isPending, navigate, redirect]);
 
-  return <Outlet />
+  return <Outlet />;
 }

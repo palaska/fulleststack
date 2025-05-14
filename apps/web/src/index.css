@@ -1,30 +1,7 @@
-.error {
-  color: red;
+@import "tailwindcss";
+
+@theme {
+  --font-sans: Inter, sans-serif;
 }
 
-.buttons {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: flex-end;
-}
-
-a[role="button"] {
-  margin-bottom: var(--pico-spacing);
-}
-
-.user-avatar {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-
-  img {
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-  }
-
-  p {
-    display: inline-block;
-    margin-bottom: 0;
-  }
-}
+@custom-variant dark (&:where(.dark, .dark *));

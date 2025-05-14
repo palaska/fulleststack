@@ -27,6 +27,12 @@ export function configureAuth(db: Db) {
       openAPI(),
       expo(),
     ],
+    session: {
+      cookieCache: {
+        enabled: true,
+        maxAge: 5 * 60, // Cache duration in seconds
+      },
+    },
     // advanced: {
     //   crossSubDomainCookies: {
     //     enabled: true,

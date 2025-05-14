@@ -1,11 +1,11 @@
 import { patchTasksSchema } from "@fulleststack/api/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 
-import RoutePending from "@/web/components/RoutePending";
-import { getTaskQueryOptions, deleteTask, queryKeys, updateTask } from "@/web/lib/queries";
+import { Button, Checkbox, Link, RoutePending } from "@/web/components";
+import { deleteTask, getTaskQueryOptions, queryKeys, updateTask } from "@/web/lib/queries/tasks";
 import queryClient from "@/web/lib/query-client";
 
 export const Route = createFileRoute("/task/edit/$id")({
@@ -54,50 +54,35 @@ function RouteComponent() {
   const error = deleteMutation.error?.message || updateMutation.error?.message;
 
   return (
-    <article>
-      {pending && <progress />}
-      {error && <article className="error">{error}</article>}
-      <form onSubmit={handleSubmit(data => updateMutation.mutate({ id, task: data }))}>
-        <label>
-          Name
-          <input {...register("name")} disabled={pending} />
-        </label>
-        <p className="error">{errors.name?.message}</p>
+    <form onSubmit={handleSubmit(data => updateMutation.mutate({ id, task: data }))}>
+      <div className="space-y-12">
+        <div className="pb-6">
+          <h2 className="text-base/7 font-semibold text-gray-900">{data.name}</h2>
 
-        <fieldset>
-          <label>
-            <input type="checkbox" {...register("done")} disabled={pending} />
-            Done
-          </label>
-          <p className="error">{errors.done?.message}</p>
-        </fieldset>
-        <button
-          type="submit"
-          disabled={pending || !isDirty}
-          className="contrast"
-        >
-          Save
-        </button>
-      </form>
-      <div className="buttons">
-        <button
-          type="button"
-          onClick={() => deleteMutation.mutate(id)}
-          disabled={pending}
-          className="contrast"
-        >
-          Delete
-        </button>
-        <Link
-          role="button"
-          to="/task/$id"
-          params={{ id }}
-          disabled={pending}
-          className="contrast outline"
-        >
-          Cancel
-        </Link>
+          <div className="mt-2">
+            <fieldset>
+              <div className="mt-6 space-y-6">
+                <div className="flex gap-3">
+                  <div className="flex h-6 shrink-0 items-center">
+                    <Checkbox aria-describedby="comments-description" {...register("done")} />
+                  </div>
+                  <div className="text-sm/6">
+                    <label htmlFor="done" className="font-medium text-gray-900">
+                      Done
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
       </div>
-    </article>
+
+      <div className="flex items-center justify-start gap-x-2">
+        <Link variant="secondary-btn" to="/task/$id" params={{ id }}>Cancel</Link>
+        <Button variant="danger" type="button" onClick={() => deleteMutation.mutate(id)} disabled={pending}>Delete</Button>
+        <Button variant="primary" type="submit" disabled={pending || !isDirty}>Save</Button>
+      </div>
+    </form>
   );
 }

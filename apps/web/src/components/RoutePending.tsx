@@ -1,4 +1,4 @@
-export default function RoutePending() {
+export function RoutePending() {
   return (
     <article>
       <progress />
