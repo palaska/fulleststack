@@ -3,6 +3,7 @@ import type React from "react";
 import clsx from "clsx";
 
 import type { LinkProps } from "./button";
+
 import { Button } from "./button";
 
 type PaginationPrevNextProps = Omit<LinkProps, "color"> & { className?: string; children?: string | number };

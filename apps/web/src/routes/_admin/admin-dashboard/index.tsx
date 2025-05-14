@@ -1,12 +1,12 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useMemo } from "react";
+import { z } from "zod";
 
 import { listUsersQueryOptions } from "@/web/lib/queries/admin";
 import queryClient from "@/web/lib/query-client";
 
 import { UsersTable } from "./-components/UsersTable";
-import { useEffect, useMemo } from "react";
-import { z } from "zod";
 
 const PAGE_SIZE = 5;
 

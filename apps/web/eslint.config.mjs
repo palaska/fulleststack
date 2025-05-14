@@ -19,6 +19,7 @@ export default createConfig({
       cases: {
         kebabCase: true,
         pascalCase: true,
+        camelCase: true,
       },
       ignore: ["README.md", "__root.tsx"],
     }],

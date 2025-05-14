@@ -27,10 +27,10 @@ export const Route = createFileRoute("/_authenticated")({
       });
     }
   },
-  component: _Authenticated,
+  component: AuthenticatedLayout,
 });
 
-function _Authenticated() {
+function AuthenticatedLayout() {
   const { isLoggedIn, isPending } = useAuth();
   const navigate = useNavigate();
   const redirect = useLocation({

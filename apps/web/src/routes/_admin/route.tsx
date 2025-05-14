@@ -27,10 +27,10 @@ export const Route = createFileRoute("/_admin")({
       });
     }
   },
-  component: _Admin,
+  component: AdminLayout,
 });
 
-function _Admin() {
+function AdminLayout() {
   const { isPending, isAdmin } = useAuth();
   const navigate = useNavigate();
   const redirect = useLocation({
