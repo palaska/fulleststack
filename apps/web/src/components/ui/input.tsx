@@ -45,7 +45,7 @@ export function Input(
         // Focus ring
         "after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:ring-transparent after:ring-inset sm:focus-within:after:ring-2 sm:focus-within:after:ring-blue-500",
         // Disabled state
-        "has-data-disabled:opacity-50 has-data-disabled:before:bg-zinc-950/5 has-data-disabled:before:shadow-none",
+        "has-data-disabled:opacity-70 has-data-disabled:before:bg-zinc-950/20 has-data-disabled:before:shadow-none",
         // Invalid state
         "has-data-invalid:before:shadow-red-500/10",
       ])}

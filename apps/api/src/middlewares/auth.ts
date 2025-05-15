@@ -13,7 +13,7 @@ export function authMiddleware(): MiddlewareHandler<AppEnv> {
       throw new Error("Database not found");
     }
 
-    const auth = configureAuth(db);
+    const auth = configureAuth(db, c.env);
 
     c.set("auth", auth);
 
