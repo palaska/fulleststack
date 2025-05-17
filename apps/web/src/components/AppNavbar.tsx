@@ -1,15 +1,11 @@
-import {
-  ArrowRightStartOnRectangleIcon,
-  Cog8ToothIcon,
-  LightBulbIcon,
-  ShieldCheckIcon,
-  UserIcon,
-} from "@heroicons/react/16/solid";
-import { useLocation } from "@tanstack/react-router";
-
 import { Avatar, Button, Dropdown, DropdownButton, DropdownDivider, DropdownItem, DropdownLabel, DropdownMenu, Link, Navbar, NavbarItem, NavbarSection, NavbarSpacer } from "@/web/components";
 import { useAuth } from "@/web/hooks/useAuth";
 import { signOut } from "@/web/lib/auth-client";
+import {
+  ArrowRightStartOnRectangleIcon,
+  UserIcon,
+} from "@heroicons/react/16/solid";
+import { useLocation } from "@tanstack/react-router";
 
 import type { FileRouteTypes } from "../route-tree.gen";
 

@@ -79,6 +79,7 @@ if ("success" in json && !json.success) {
 ```
 
 The client preserves all type information from the API routes, providing autocompletion for:
+
 - API endpoints
 - Request methods
 - Request parameters

@@ -1,10 +1,12 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import type { SubmitHandler } from "react-hook-form";
 
-import { Logo, AuthLayout, Button, Checkbox, CheckboxField, Field, Heading, Input, Label, Select, Strong, Text, TextLink, ErrorMessage } from "@/web/components";
-import { signUp } from "@/web/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
+
+import { AuthLayout, Button, Checkbox, CheckboxField, ErrorMessage, Field, Heading, Input, Label, Logo, Select, Strong, Text, TextLink } from "@/web/components";
+import { signUp } from "@/web/lib/auth-client";
 
 export const Route = createFileRoute("/_auth/signup")({
   component: SignUp,
@@ -49,6 +51,7 @@ function SignUp() {
     });
 
     if (res.error) {
+      // eslint-disable-next-line no-alert
       alert(res.error.message || "Authentication failed");
     }
     else {

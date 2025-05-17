@@ -180,7 +180,7 @@ export function DropdownShortcut({
     >
       {(Array.isArray(keys) ? keys : keys.split("")).map((char, index) => (
         <kbd
-          key={index}
+          key={`${char}-${char.charCodeAt(0)}-${Math.random().toString(36).substring(2, 7)}`}
           className={clsx([
             "min-w-[2ch] text-center font-sans text-zinc-400 capitalize group-data-focus:text-white forced-colors:group-data-focus:text-[HighlightText]",
             // Make sure key names that are longer than one character (like "Tab") have extra space
