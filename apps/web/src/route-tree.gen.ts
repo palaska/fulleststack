@@ -16,6 +16,7 @@ import { Route as TaskIdImport } from './routes/task/$id'
 import { Route as AuthenticatedProfileImport } from './routes/_authenticated/profile'
 import { Route as AuthSignupImport } from './routes/_auth/signup'
 import { Route as AuthSigninImport } from './routes/_auth/signin'
+import { Route as AuthResetPasswordImport } from './routes/_auth/reset-password'
 import { Route as AuthForgotPasswordImport } from './routes/_auth/forgot-password'
 import { Route as AdminAdminDashboardIndexImport } from './routes/_admin/admin-dashboard/index'
 import { Route as TaskEditIdImport } from './routes/task/edit.$id'
@@ -59,6 +60,12 @@ const AuthSignupRoute = AuthSignupImport.update({
 const AuthSigninRoute = AuthSigninImport.update({
   id: '/_auth/signin',
   path: '/signin',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthResetPasswordRoute = AuthResetPasswordImport.update({
+  id: '/_auth/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -110,6 +117,13 @@ declare module '@tanstack/react-router' {
       path: '/forgot-password'
       fullPath: '/forgot-password'
       preLoaderRoute: typeof AuthForgotPasswordImport
+      parentRoute: typeof rootRoute
+    }
+    '/_auth/reset-password': {
+      id: '/_auth/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof AuthResetPasswordImport
       parentRoute: typeof rootRoute
     }
     '/_auth/signin': {
@@ -186,6 +200,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof AuthenticatedRouteRouteWithChildren
   '/forgot-password': typeof AuthForgotPasswordRoute
+  '/reset-password': typeof AuthResetPasswordRoute
   '/signin': typeof AuthSigninRoute
   '/signup': typeof AuthSignupRoute
   '/profile': typeof AuthenticatedProfileRoute
@@ -198,6 +213,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof AuthenticatedRouteRouteWithChildren
   '/forgot-password': typeof AuthForgotPasswordRoute
+  '/reset-password': typeof AuthResetPasswordRoute
   '/signin': typeof AuthSigninRoute
   '/signup': typeof AuthSignupRoute
   '/profile': typeof AuthenticatedProfileRoute
@@ -212,6 +228,7 @@ export interface FileRoutesById {
   '/_admin': typeof AdminRouteRouteWithChildren
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/_auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/_auth/reset-password': typeof AuthResetPasswordRoute
   '/_auth/signin': typeof AuthSigninRoute
   '/_auth/signup': typeof AuthSignupRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
@@ -226,6 +243,7 @@ export interface FileRouteTypes {
     | '/'
     | ''
     | '/forgot-password'
+    | '/reset-password'
     | '/signin'
     | '/signup'
     | '/profile'
@@ -237,6 +255,7 @@ export interface FileRouteTypes {
     | '/'
     | ''
     | '/forgot-password'
+    | '/reset-password'
     | '/signin'
     | '/signup'
     | '/profile'
@@ -249,6 +268,7 @@ export interface FileRouteTypes {
     | '/_admin'
     | '/_authenticated'
     | '/_auth/forgot-password'
+    | '/_auth/reset-password'
     | '/_auth/signin'
     | '/_auth/signup'
     | '/_authenticated/profile'
@@ -263,6 +283,7 @@ export interface RootRouteChildren {
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
+  AuthResetPasswordRoute: typeof AuthResetPasswordRoute
   AuthSigninRoute: typeof AuthSigninRoute
   AuthSignupRoute: typeof AuthSignupRoute
   TaskIdRoute: typeof TaskIdRoute
@@ -274,6 +295,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRouteRoute: AdminRouteRouteWithChildren,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthForgotPasswordRoute: AuthForgotPasswordRoute,
+  AuthResetPasswordRoute: AuthResetPasswordRoute,
   AuthSigninRoute: AuthSigninRoute,
   AuthSignupRoute: AuthSignupRoute,
   TaskIdRoute: TaskIdRoute,
@@ -294,6 +316,7 @@ export const routeTree = rootRoute
         "/_admin",
         "/_authenticated",
         "/_auth/forgot-password",
+        "/_auth/reset-password",
         "/_auth/signin",
         "/_auth/signup",
         "/task/$id",
@@ -317,6 +340,9 @@ export const routeTree = rootRoute
     },
     "/_auth/forgot-password": {
       "filePath": "_auth/forgot-password.tsx"
+    },
+    "/_auth/reset-password": {
+      "filePath": "_auth/reset-password.tsx"
     },
     "/_auth/signin": {
       "filePath": "_auth/signin.tsx"

@@ -6,21 +6,17 @@
 import { config } from "dotenv";
 /* eslint-disable node/no-process-env */
 import path from "node:path";
-import { z } from "zod";
 
 import { createDb } from "@/api/db";
 import { configureAuth } from "@/api/lib/auth";
+import { validateEnv } from "@/api/env";
 
 // Load environment variables for development tools
 config({
   path: path.resolve(__dirname, "../../.dev.vars"),
 });
 
-const env = z.object({
-  TURSO_URL: z.string(),
-  TURSO_AUTH_TOKEN: z.string(),
-}).parse(process.env);
-
+const env = validateEnv(process.env);
 const db = createDb(env);
 
-export const auth = configureAuth(db);
+export const auth = configureAuth(db, env);
