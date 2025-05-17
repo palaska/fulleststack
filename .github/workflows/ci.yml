@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, sdp/github-actions]
   pull_request:
     branches: [main]
 
