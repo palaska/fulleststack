@@ -1,7 +1,7 @@
 /**
  * Default date field names that will be automatically converted from strings to Date objects
  */
-const DEFAULT_DATE_FIELDS = ['createdAt', 'updatedAt'] as const;
+const DEFAULT_DATE_FIELDS = ["createdAt", "updatedAt"] as const;
 
 /**
  * Union type of the default date field names
@@ -23,16 +23,16 @@ type DateFieldNames = typeof DEFAULT_DATE_FIELDS[number];
 type WithParsedDates<T, K extends string> = T extends (infer U)[]
   ? WithParsedDates<U, K>[]
   : T extends object
-  ? {
-      [P in keyof T]: P extends K
-        ? T[P] extends string
-          ? Date
-          : T[P]
-        : T[P] extends object
-        ? WithParsedDates<T[P], K>
-        : T[P];
-    }
-  : T;
+    ? {
+        [P in keyof T]: P extends K
+          ? T[P] extends string
+            ? Date
+            : T[P]
+          : T[P] extends object
+            ? WithParsedDates<T[P], K>
+            : T[P];
+      }
+    : T;
 
 /**
  * Converts string date fields to Date objects in an object or array of objects
@@ -65,15 +65,12 @@ type WithParsedDates<T, K extends string> = T extends (infer U)[]
  * );
  * // Result: { id: 1, title: 'Hello', publishedAt: Date(...) }
  */
-export const withParsedDates = <
+export function withParsedDates<
   T extends Record<string, any> | Record<string, any>[] | null | undefined,
-  K extends string = DateFieldNames
->(
-  data: T,
-  extraFields: K[] = []
-): WithParsedDates<T, DateFieldNames | K> => {
+  K extends string = DateFieldNames,
+>(data: T, extraFields: K[] = []): WithParsedDates<T, DateFieldNames | K> {
   // Return early for null, undefined, or non-object values
-  if (data === null || data === undefined || typeof data !== 'object') {
+  if (data === null || data === undefined || typeof data !== "object") {
     return data as WithParsedDates<T, DateFieldNames | K>;
   }
 
@@ -89,14 +86,15 @@ export const withParsedDates = <
 
   // Process each property in the object
   for (const [key, value] of Object.entries(result)) {
-    if (value && typeof value === 'string' && dateFields.includes(key as any)) {
+    if (value && typeof value === "string" && dateFields.includes(key as any)) {
       // Convert string to Date if the field name is in dateFields
       result[key] = new Date(value);
-    } else if (value && typeof value === 'object') {
+    }
+    else if (value && typeof value === "object") {
       // Recursively process nested objects
       result[key] = withParsedDates(value, extraFields);
     }
   }
 
   return result as WithParsedDates<T, DateFieldNames | K>;
-};
+}

@@ -44,6 +44,7 @@ function SignIn() {
     });
 
     if (res.error) {
+      // eslint-disable-next-line no-alert
       alert(res.error.message || "Authentication failed");
     }
     else {

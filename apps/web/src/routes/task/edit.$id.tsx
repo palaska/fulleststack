@@ -23,7 +23,7 @@ function RouteComponent() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isDirty },
+    formState: { isDirty },
   } = useForm<patchTasksSchema>({
     defaultValues: data,
     resolver: zodResolver(patchTasksSchema),
@@ -51,7 +51,7 @@ function RouteComponent() {
   });
 
   const pending = deleteMutation.isPending || updateMutation.isPending;
-  const error = deleteMutation.error?.message || updateMutation.error?.message;
+  // const error = deleteMutation.error?.message || updateMutation.error?.message;
 
   return (
     <form onSubmit={handleSubmit(data => updateMutation.mutate({ id, task: data }))}>
