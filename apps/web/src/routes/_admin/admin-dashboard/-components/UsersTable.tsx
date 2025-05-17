@@ -48,10 +48,10 @@ export function UsersTable(
         <PaginationPrevious search={{ page: Math.max(1, page - 1) }} disabled={page <= 1} preload="intent" />
 
         <PaginationList>
-          {paginationItems.map((item, _index) => {
+          {paginationItems.map((item, index) => {
             if (item.type === "gap") {
               // Create a unique key based on surrounding page numbers
-              return <PaginationGap key={`gap-${Math.random().toString(36).substring(2, 9)}`} />;
+              return <PaginationGap key={`gap-${index}`} />;
             }
             return (
               <PaginationPage
