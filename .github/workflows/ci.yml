@@ -15,35 +15,23 @@ jobs:
     name: Setup
     runs-on: ubuntu-latest
     outputs:
-      node-version: '20'
-      pnpm-version: '10.10.0'
+      node-version: 22
+      pnpm-version: 10.10.0
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
+        
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:
           version: 10.10.0
+          run_install: false
 
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-
-      - name: Setup pnpm cache
-        uses: actions/cache@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+          node-version: 22
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install
@@ -52,23 +40,7 @@ jobs:
         id: syncpack-check
         continue-on-error: true
         run: pnpm syncpack:check
-        
-      # - name: Fix dependency versions
-      #   if: steps.syncpack-check.outcome == 'failure'
-      #   run: |
-      #     echo "Fixing dependency version mismatches with syncpack"
-      #     pnpm syncpack:fix
-      #     git config --global user.name "GitHub Actions"
-      #     git config --global user.email "actions@github.com"
-      #     git add .
-      #     git commit -m "Fix dependency version mismatches with syncpack" || echo "No changes to commit"
-        
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        id: node-modules-cache
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+      
 
   lint:
     name: Lint
@@ -78,21 +50,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ needs.setup.outputs.node-version }}
-
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:
           version: ${{ needs.setup.outputs.pnpm-version }}
+          run_install: false
 
-      - name: Restore node_modules
-        uses: actions/cache@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+          node-version: ${{ needs.setup.outputs.node-version }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Run linting
         run: pnpm lint
@@ -104,22 +75,21 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: ${{ needs.setup.outputs.pnpm-version }}
+          run_install: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ needs.setup.outputs.node-version }}
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: ${{ needs.setup.outputs.pnpm-version }}
-
-      - name: Restore node_modules
-        uses: actions/cache@v4
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Run type checking
         run: pnpm typecheck
@@ -132,21 +102,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ needs.setup.outputs.node-version }}
-
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:
           version: ${{ needs.setup.outputs.pnpm-version }}
+          run_install: false
 
-      - name: Restore node_modules
-        uses: actions/cache@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+          node-version: ${{ needs.setup.outputs.node-version }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Build
         run: pnpm build
@@ -158,22 +127,21 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: ${{ needs.setup.outputs.pnpm-version }}
+          run_install: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ needs.setup.outputs.node-version }}
+          cache: 'pnpm'
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: ${{ needs.setup.outputs.pnpm-version }}
-
-      - name: Restore node_modules
-        uses: actions/cache@v4
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Run tests
         run: pnpm test
