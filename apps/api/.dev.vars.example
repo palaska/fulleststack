@@ -8,3 +8,7 @@ BETTER_AUTH_SECRET=your_jwt_secret_here_at_least_32_chars_long
 # Turso
 TURSO_URL=http://127.0.0.1:8080
 TURSO_AUTH_TOKEN=abc123
+
+# Resend
+RESEND_API_KEY=your_resend_api_key_here
+EMAIL_FROM=Your Name <your_email@example.com>
