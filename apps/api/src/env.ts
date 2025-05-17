@@ -5,6 +5,8 @@ const EnvSchema = z.object({
   LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"]),
   TURSO_URL: z.string().url(),
   TURSO_AUTH_TOKEN: z.string().optional(),
+  RESEND_API_KEY: z.string(),
+  EMAIL_FROM: z.string(),
 }).passthrough().superRefine((input, ctx) => {
   if (input.ENVIRONMENT === "production" && !input.TURSO_AUTH_TOKEN) {
     ctx.addIssue({

@@ -3,7 +3,7 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 import type { Session, User } from "@/web/lib/auth-client";
 
-import { AppNavbar } from "@/web/components";
+import { AppNavbar, RouteError } from "@/web/components";
 
 type AppContext = {
   auth: {
@@ -16,6 +16,7 @@ type AppContext = {
 };
 
 export const Route = createRootRouteWithContext<AppContext>()({
+  errorComponent: RouteError,
   component: () => (
     <div className="min-h-full">
       <AppNavbar />

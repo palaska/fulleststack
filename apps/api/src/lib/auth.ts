@@ -6,13 +6,16 @@ import { admin, openAPI } from "better-auth/plugins";
 import type { Db } from "@/api/db";
 import type { accounts, sessions, users } from "@/api/db/auth.schema";
 
+import type { Environment } from "../env";
+
+import { Emailer } from "../services/email";
 import { trustedOrigins } from "./constants";
 
 export type User = typeof users.$inferInsert;
 export type Session = typeof sessions.$inferInsert;
 export type Account = typeof accounts.$inferInsert;
 
-export function configureAuth(db: Db) {
+export function configureAuth(db: Db, env: Environment) {
   return betterAuth({
     database: drizzleAdapter(db, {
       provider: "sqlite",
@@ -21,6 +24,10 @@ export function configureAuth(db: Db) {
     trustedOrigins,
     emailAndPassword: {
       enabled: true,
+      resetPasswordTokenExpiresIn: 10 * 60, // 10 minutes
+      sendResetPassword: async ({ user, url, token }, request) => {
+        await Emailer(env).forgotPassword({ to: user.email, url });
+      },
     },
     plugins: [
       admin(),

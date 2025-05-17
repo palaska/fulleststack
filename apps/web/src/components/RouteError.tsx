@@ -1,7 +1,10 @@
+import { Heading } from "@/web/components";
+
 export function RouteError({ error }: { error: Error }) {
+  console.error("RouteError", error);
   return (
     <article className="error">
-      {error.message}
+      <Heading>Something went wrong</Heading>
     </article>
   );
 }
