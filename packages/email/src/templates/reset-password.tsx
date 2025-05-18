@@ -10,9 +10,10 @@ import {
   Text,
 } from "@react-email/components";
 
+import type { EmailTemplate } from "../types";
+
 import Footer from "../components/footer";
 import Layout from "../components/layout";
-import type { EmailTemplate } from "../types";
 
 export type ResetPasswordSubjectProps = {};
 
@@ -24,7 +25,7 @@ export type ResetPasswordEmailProps = {
 export const ResetPasswordTemplate: EmailTemplate<ResetPasswordSubjectProps, ResetPasswordEmailProps> = {
   subject: () => "Reset your password",
   body: ResetPasswordEmail,
-}
+};
 
 export function ResetPasswordEmail({
   name,
@@ -33,7 +34,8 @@ export function ResetPasswordEmail({
   return (
     <Layout>
       <Preview>
-        You requested to reset your password for your
+        You requested to reset the password for your
+        {" "}
         {COMPANY_NAME}
         {" "}
         account
@@ -89,7 +91,6 @@ export function ResetPasswordEmail({
           </Text>
         </Section>
       </Container>
-
       <Footer />
     </Layout>
   );

@@ -1,8 +1,8 @@
 import type { MiddlewareHandler } from "hono";
 
-import type { AppEnv } from "@/api/lib/types";
-
 import { Emailer } from "@fulleststack/email";
+
+import type { AppEnv } from "@/api/lib/types";
 
 /**
  * Middleware that attaches emailer to the context

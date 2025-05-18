@@ -5,15 +5,15 @@ export default function Footer() {
   return (
     <Section className="max-w-[580px] mx-auto">
       <Row>
-        <Column className="w-full opacity-70" align="center">
+        <Column className="w-full opacity-100" align="center">
           <Link className="mx-2 inline-block" href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer">
-            <Img className="p-1" src="https://img.icons8.com/ios-filled/30/linkedin.png" alt="linkedin"/>
+            <Img className="p-1 w-[32px]" src="https://img.icons8.com/color/48/linkedin.png" alt="linkedin" />
           </Link>
           <Link className="mx-2 inline-block" href={X_URL} target="_blank" rel="noopener noreferrer">
-            <Img className="p-1" src="https://img.icons8.com/ios-filled/30/twitterx--v1.png" alt="x"/>
+            <Img className="p-1 w-[32px]" src="https://img.icons8.com/color/48/twitterx--v1.png" alt="x" />
           </Link>
           <Link className="mx-2 inline-block" href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
-            <Img className="p-1"  src="https://img.icons8.com/ios-filled/30/instagram-new--v1.png" alt="instagram"/>
+            <Img className="p-1 w-[32px]" src="https://img.icons8.com/color/48/instagram-new--v1.png" alt="instagram" />
           </Link>
         </Column>
       </Row>
