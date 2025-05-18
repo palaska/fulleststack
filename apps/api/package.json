@@ -21,6 +21,7 @@
     "test": "cross-env ENVIRONMENT=test vitest"
   },
   "dependencies": {
+    "@fulleststack/email": "workspace:^",
     "@hono/zod-openapi": "0.19.6",
     "@libsql/client": "0.15.4",
     "@scalar/hono-api-reference": "0.8.5",
@@ -31,7 +32,6 @@
     "hono-pino": "^0.8.0",
     "pino": "^9.6.0",
     "pino-pretty": "^13.0.0",
-    "resend": "^4.5.1",
     "stoker": "^1.4.2",
     "zod": "workspace:*"
   },

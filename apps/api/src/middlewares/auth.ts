@@ -5,15 +5,16 @@ import type { AppEnv, AppRouteHandler } from "@/api/lib/types";
 
 import { configureAuth } from "@/api/lib/auth";
 
-export function authMiddleware(): MiddlewareHandler<AppEnv> {
+export function attachAuthEntities(): MiddlewareHandler<AppEnv> {
   return async (c, next) => {
     const db = c.get("db");
+    const emailer = c.get("emailer");
 
-    if (!db) {
-      throw new Error("Database not found");
+    if (!db || !emailer) {
+      throw new Error("Database or emailer not found");
     }
 
-    const auth = configureAuth(db, c.env);
+    const auth = configureAuth(c);
 
     c.set("auth", auth);
 
