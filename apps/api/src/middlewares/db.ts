@@ -7,7 +7,7 @@ import { createDb } from "@/api/db";
 /**
  * Middleware that attaches database to the context
  */
-export function dbMiddleware(): MiddlewareHandler<AppEnv> {
+export function attachDb(): MiddlewareHandler<AppEnv> {
   return (c, next) => {
     const db = createDb(c.env);
 

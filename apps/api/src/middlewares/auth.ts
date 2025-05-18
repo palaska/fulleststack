@@ -5,7 +5,7 @@ import type { AppEnv, AppRouteHandler } from "@/api/lib/types";
 
 import { configureAuth } from "@/api/lib/auth";
 
-export function authMiddleware(): MiddlewareHandler<AppEnv> {
+export function attachAuthEntities(): MiddlewareHandler<AppEnv> {
   return async (c, next) => {
     const db = c.get("db");
 
@@ -13,7 +13,7 @@ export function authMiddleware(): MiddlewareHandler<AppEnv> {
       throw new Error("Database not found");
     }
 
-    const auth = configureAuth(db, c.env);
+    const auth = configureAuth(c);
 
     c.set("auth", auth);
 

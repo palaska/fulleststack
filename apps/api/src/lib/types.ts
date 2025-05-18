@@ -7,6 +7,7 @@ import type { Environment } from "@/api/env";
 
 import type { Session, User } from "./auth";
 import type { BASE_PATH } from "./constants";
+import { Emailer } from "@fulleststack/email";
 
 export type AppEnv = {
   Variables: {
@@ -19,6 +20,9 @@ export type AppEnv = {
     auth: ReturnType<typeof betterAuth>;
     user: User | null;
     session: Session | null;
+
+    // Emailer is attached by the emailer middleware
+    emailer: Emailer;
 
   };
   Bindings: {

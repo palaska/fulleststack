@@ -3,21 +3,19 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { admin, openAPI } from "better-auth/plugins";
 
-import type { Db } from "@/api/db";
 import type { accounts, sessions, users } from "@/api/db/auth.schema";
 
-import type { Environment } from "../env";
-
-import { Emailer } from "../services/email";
 import { trustedOrigins } from "./constants";
+import { AppEnv } from "./types";
+import { Context } from "hono";
 
 export type User = typeof users.$inferInsert;
 export type Session = typeof sessions.$inferInsert;
 export type Account = typeof accounts.$inferInsert;
 
-export function configureAuth(db: Db, env: Environment) {
+export function configureAuth(c: Context<AppEnv>) {
   return betterAuth({
-    database: drizzleAdapter(db, {
+    database: drizzleAdapter(c.get("db"), {
       provider: "sqlite",
       usePlural: true,
     }),
@@ -25,8 +23,8 @@ export function configureAuth(db: Db, env: Environment) {
     emailAndPassword: {
       enabled: true,
       resetPasswordTokenExpiresIn: 10 * 60, // 10 minutes
-      sendResetPassword: async ({ user, url, token }, request) => {
-        await Emailer(env).forgotPassword({ to: user.email, url });
+      sendResetPassword: async ({ user, url }) => {
+        await c.get("emailer").resetPassword({ to: user.email, name: user.name, url });
       },
     },
     plugins: [
