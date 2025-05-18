@@ -50,7 +50,6 @@ export function UsersTable(
         <PaginationList>
           {paginationItems.map((item, index) => {
             if (item.type === "gap") {
-              // Create a unique key based on surrounding page numbers
               return <PaginationGap key={`gap-${index}`} />;
             }
             return (
