@@ -10,9 +10,9 @@ import { pinoLogger } from "@/api/middlewares/logger";
 
 import type { AppOpenAPI } from "./types";
 
+import { attachEmailer } from "../middlewares/emailer";
 import { BASE_PATH, trustedOrigins } from "./constants";
 import createRouter from "./create-router";
-import { attachEmailer } from "../middlewares/emailer";
 
 export default function createApp() {
   const app = createRouter()
@@ -52,12 +52,12 @@ export default function createApp() {
   }));
 
   app.use(serveEmojiFavicon("📝"))
-  .use(attachDb())
-  .use(attachEmailer())
-  .use(attachAuthEntities()) // depends on emailer and db to be attached first
-  .on(["POST", "GET"], "/auth/**", (c) => {
-    return c.get("auth").handler(c.req.raw);
-  });
+    .use(attachDb())
+    .use(attachEmailer())
+    .use(attachAuthEntities()) // depends on emailer and db to be attached first
+    .on(["POST", "GET"], "/auth/**", (c) => {
+      return c.get("auth").handler(c.req.raw);
+    });
 
   app.notFound(notFound);
   app.onError(onError);

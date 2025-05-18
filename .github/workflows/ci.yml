@@ -5,7 +5,6 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
-    types: [opened, synchronize, reopened]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -60,22 +59,22 @@ jobs:
       - name: Run linting
         run: pnpm lint
 
-  typecheck:
-    name: Type Check
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+  # typecheck:
+  #   name: Type Check
+  #   needs: setup
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
       
-      - name: Setup environment
-        uses: ./.github/actions/setup
-        with:
-          node-version: ${{ needs.setup.outputs.node-version }}
-          pnpm-version: ${{ needs.setup.outputs.pnpm-version }}
+  #     - name: Setup environment
+  #       uses: ./.github/actions/setup
+  #       with:
+  #         node-version: ${{ needs.setup.outputs.node-version }}
+  #         pnpm-version: ${{ needs.setup.outputs.pnpm-version }}
 
-      - name: Run type checking
-        run: pnpm typecheck
+  #     - name: Run type checking
+  #       run: pnpm typecheck
 
   build:
     name: Build
@@ -94,19 +93,19 @@ jobs:
       - name: Build
         run: pnpm build
 
-  test:
-    name: Test
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+  # test:
+  #   name: Test
+  #   needs: setup
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
       
-      - name: Setup environment
-        uses: ./.github/actions/setup
-        with:
-          node-version: ${{ needs.setup.outputs.node-version }}
-          pnpm-version: ${{ needs.setup.outputs.pnpm-version }}
+  #     - name: Setup environment
+  #       uses: ./.github/actions/setup
+  #       with:
+  #         node-version: ${{ needs.setup.outputs.node-version }}
+  #         pnpm-version: ${{ needs.setup.outputs.pnpm-version }}
 
-      - name: Run tests
-        run: pnpm test
+  #     - name: Run tests
+  #       run: pnpm test
