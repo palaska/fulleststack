@@ -10,6 +10,7 @@
     "dev": "turbo dev",
     "test": "turbo test",
     "lint": "turbo lint",
+    "lint:fix": "turbo lint -- --fix",
     "deploy": "turbo run deploy",
     "check-versions": "node scripts/check-versions.js",
     "find-dep-version": "node scripts/find-compatible-version.js",

@@ -10,11 +10,12 @@ import {
   Text,
 } from "@react-email/components";
 
-import Footer from "../components/footer";
-import Layout from "../components/layout";
 import type { EmailTemplate } from "../types";
 
-export type PasswordChangedSubjectProps = {};
+import Footer from "../components/footer";
+import Layout from "../components/layout";
+
+export type PasswordChangedSubjectProps = unknown;
 
 export type PasswordChangedEmailProps = {
   name: string;
@@ -25,7 +26,7 @@ export type PasswordChangedEmailProps = {
 export const PasswordChangedTemplate: EmailTemplate<PasswordChangedSubjectProps, PasswordChangedEmailProps> = {
   subject: () => "Your password is changed",
   body: PasswordChangedEmail,
-}
+};
 
 export function PasswordChangedEmail({
   name,

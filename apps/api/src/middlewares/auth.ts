@@ -14,7 +14,7 @@ export function attachAuthEntities(): MiddlewareHandler<AppEnv> {
       throw new Error("Database or emailer not found");
     }
 
-    const auth = configureAuth(c);
+    const auth = configureAuth(db, emailer);
 
     c.set("auth", auth);
 

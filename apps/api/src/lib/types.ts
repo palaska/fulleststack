@@ -1,3 +1,4 @@
+import type { Emailer } from "@fulleststack/email";
 import type { OpenAPIHono, RouteConfig, RouteHandler } from "@hono/zod-openapi";
 import type { betterAuth } from "better-auth";
 import type { PinoLogger } from "hono-pino";
@@ -7,7 +8,6 @@ import type { Environment } from "@/api/env";
 
 import type { Session, User } from "./auth";
 import type { BASE_PATH } from "./constants";
-import { Emailer } from "@fulleststack/email";
 
 export type AppEnv = {
   Variables: {

@@ -15,7 +15,7 @@ import type { EmailTemplate } from "../types";
 import Footer from "../components/footer";
 import Layout from "../components/layout";
 
-export type ResetPasswordSubjectProps = {};
+export type ResetPasswordSubjectProps = unknown;
 
 export type ResetPasswordEmailProps = {
   name: string;
@@ -68,7 +68,9 @@ export function ResetPasswordEmail({
             We have received a request to reset your password.
           </Text>
           <Text className="leading-6 text-sm">
-            If you didn't make this request, please ignore this message. Otherwise, you can reset your password by clicking the link below:
+            If you didn't make this request, please ignore this message.
+            {" "}
+            Otherwise, you can reset your password by clicking the link below:
           </Text>
           <Text className="leading-6 text-sm">
             <Link href={url} className="underline">

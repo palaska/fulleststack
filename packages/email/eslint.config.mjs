@@ -5,5 +5,6 @@ export default createConfig({
 }, {
   rules: {
     "unicorn/filename-case": "off",
+    "react-refresh/only-export-components": "off",
   },
 });

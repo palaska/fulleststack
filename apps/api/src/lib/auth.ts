@@ -1,4 +1,4 @@
-import type { Context } from "hono";
+import type { Emailer } from "@fulleststack/email";
 
 import { expo } from "@better-auth/expo";
 import { betterAuth } from "better-auth";
@@ -7,7 +7,7 @@ import { admin, openAPI } from "better-auth/plugins";
 
 import type { accounts, sessions, users } from "@/api/db/auth.schema";
 
-import type { AppEnv } from "./types";
+import type { Db } from "../db";
 
 import { trustedOrigins } from "./constants";
 
@@ -15,9 +15,9 @@ export type User = typeof users.$inferInsert;
 export type Session = typeof sessions.$inferInsert;
 export type Account = typeof accounts.$inferInsert;
 
-export function configureAuth(c: Context<AppEnv>) {
+export function configureAuth(db: Db, emailer: Emailer) {
   return betterAuth({
-    database: drizzleAdapter(c.get("db"), {
+    database: drizzleAdapter(db, {
       provider: "sqlite",
       usePlural: true,
     }),
@@ -26,7 +26,7 @@ export function configureAuth(c: Context<AppEnv>) {
       enabled: true,
       resetPasswordTokenExpiresIn: 10 * 60, // 10 minutes
       sendResetPassword: async ({ user, url }) => {
-        await c.get("emailer").resetPassword({ to: user.email, name: user.name, url });
+        await emailer.resetPassword({ to: user.email, name: user.name, url });
       },
     },
     plugins: [

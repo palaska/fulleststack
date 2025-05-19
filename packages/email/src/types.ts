@@ -17,6 +17,6 @@ export type BaseSendMailOptions = {
   from?: string;
   replyTo?: string;
   tags?: Tag[];
-}
+};
 
 export type SendMailViaTemplateOptions<S, B> = BaseSendMailOptions & S & B;
