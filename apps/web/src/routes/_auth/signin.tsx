@@ -86,7 +86,7 @@ function SignIn() {
             </TextLink>
           </Text>
         </div>
-        <Button type="submit" className="w-full">
+        <Button disabled={isLoading} type="submit" className="w-full">
           {isLoading ? <Spinner /> : "Sign in"}
         </Button>
         <Text>
