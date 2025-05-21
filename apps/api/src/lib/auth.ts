@@ -24,9 +24,17 @@ export function configureAuth(db: Db, emailer: Emailer) {
     trustedOrigins,
     emailAndPassword: {
       enabled: true,
+      requireEmailVerification: true,
       resetPasswordTokenExpiresIn: 10 * 60, // 10 minutes
       sendResetPassword: async ({ user, url }) => {
         await emailer.resetPassword({ to: user.email, name: user.name, url });
+      },
+    },
+    emailVerification: {
+      sendOnSignUp: true,
+      autoSignInAfterVerification: true,
+      sendVerificationEmail: async ({ user, url }) => {
+        await emailer.verifyEmail({ to: user.email, name: user.name, url });
       },
     },
     plugins: [

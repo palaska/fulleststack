@@ -23,6 +23,10 @@ const schema = z.object({
 
 function SignIn() {
   const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<{ title: string; description: string }>({
+    title: "An error has occurred",
+    description: "Authentication failed. Please try again.",
+  });
   const { redirect } = Route.useSearch();
   const navigate = useNavigate();
 
@@ -44,6 +48,15 @@ function SignIn() {
       email: data.email,
       password: data.password,
       rememberMe: true,
+    }, {
+      onError: (ctx) => {
+        if (ctx.error.status === 403) {
+          setErrorMessage({
+            title: "Verification Required",
+            description: "Please verify your email",
+          });
+        }
+      },
     });
 
     if (res.error) {
@@ -59,7 +72,7 @@ function SignIn() {
         <Logo className="h-16 text-zinc-950 dark:text-white forced-colors:text-[CanvasText]" />
         <Heading>Sign in to your account</Heading>
         {hasError && (
-          <Alert variant="error" title="An error has occurred" description="Authentication failed. Please try again." />
+          <Alert variant="error" title={errorMessage.title} description={errorMessage.description} />
         )}
         <Field>
           <Label>Email</Label>
@@ -86,7 +99,7 @@ function SignIn() {
           Sign in
         </Button>
         <Text>
-          Don’t have an account?
+          Don't have an account?
           {" "}
           <TextLink to="/signup">
             <Strong>Sign up</Strong>
