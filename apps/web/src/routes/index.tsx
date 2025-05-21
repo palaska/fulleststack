@@ -7,6 +7,8 @@ import queryClient from "@/web/lib/query-client";
 import TaskForm from "@/web/routes/task/-components/form";
 import TaskList from "@/web/routes/task/-components/list";
 
+import { useAuth } from "../hooks/useAuth";
+
 export const Route = createFileRoute("/")({
   component: Index,
   loader: () => queryClient.ensureQueryData(tasksQueryOptions),
@@ -17,9 +19,10 @@ function Index() {
   const {
     data,
   } = useSuspenseQuery(tasksQueryOptions);
+  const { isLoggedIn } = useAuth();
   return (
     <div>
-      <TaskForm />
+      {isLoggedIn && <TaskForm />}
       <TaskList tasks={data} />
     </div>
   );

@@ -15,5 +15,9 @@
     "isolatedModules": true,
     "skipLibCheck": true,
     "noUncheckedSideEffectImports": true
-  }
+  },
+  "include": ["src"],
+  "watchOptions": {
+    "excludeDirectories": ["node_modules"]
+  },
 }

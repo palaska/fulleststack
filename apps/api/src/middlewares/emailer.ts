@@ -1,19 +1,16 @@
-import type { MiddlewareHandler } from "hono";
-
 import { Emailer } from "@fulleststack/email";
+import { createMiddleware } from "hono/factory";
 
 import type { AppEnv } from "@/api/lib/types";
 
 /**
  * Middleware that attaches emailer to the context
  */
-export function attachEmailer(): MiddlewareHandler<AppEnv> {
-  return (c, next) => {
-    const emailer = new Emailer(c.env);
+export const attachEmailer = createMiddleware<AppEnv>(async (c, next) => {
+  const emailer = new Emailer(c.env);
 
-    // Attach emailer to context
-    c.set("emailer", emailer);
+  // Attach emailer to context
+  c.set("emailer", emailer);
 
-    return next();
-  };
-}
+  return next();
+});

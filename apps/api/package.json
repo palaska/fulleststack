@@ -20,6 +20,7 @@
     "test": "cross-env ENVIRONMENT=test vitest"
   },
   "dependencies": {
+    "@fulleststack/common": "workspace:^",
     "@fulleststack/email": "workspace:^",
     "@hono/zod-openapi": "0.19.6",
     "@libsql/client": "0.15.4",

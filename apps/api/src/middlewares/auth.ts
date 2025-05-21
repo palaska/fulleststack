@@ -1,53 +1,94 @@
-import type { RouteConfig } from "@hono/zod-openapi";
-import type { Context, MiddlewareHandler, Next } from "hono";
+import { promiseAllSettled } from "@fulleststack/common";
+import { createMiddleware } from "hono/factory";
+import * as HttpStatusCodes from "stoker/http-status-codes";
+import * as HttpStatusPhrases from "stoker/http-status-phrases";
 
-import type { AppEnv, AppRouteHandler } from "@/api/lib/types";
+import type { statements } from "@/api/lib/permissions";
+import type { AppEnv } from "@/api/lib/types";
 
 import { configureAuth } from "@/api/lib/auth";
+import { roles } from "@/api/lib/permissions";
 
-export function attachAuthEntities(): MiddlewareHandler<AppEnv> {
-  return async (c, next) => {
-    const db = c.get("db");
-    const emailer = c.get("emailer");
+export const attachAuthEntities = createMiddleware<AppEnv>(async (c, next) => {
+  const db = c.get("db");
+  const emailer = c.get("emailer");
 
-    if (!db || !emailer) {
-      throw new Error("Database or emailer not found");
+  if (!db || !emailer) {
+    throw new Error("Database or emailer not found");
+  }
+
+  const auth = configureAuth(db, emailer);
+
+  c.set("auth", auth);
+
+  const session = await auth.api.getSession({ headers: c.req.raw.headers });
+
+  if (!session) {
+    c.set("user", null);
+    c.set("session", null);
+    return next();
+  }
+
+  c.set("user", session.user);
+  c.set("session", session.session);
+  return next();
+});
+
+export const isLoggedIn = createMiddleware<AppEnv>(async (c, next) => {
+  const user = c.get("user");
+
+  if (!user) {
+    return c.json({ message: HttpStatusPhrases.UNAUTHORIZED }, HttpStatusCodes.UNAUTHORIZED);
+  }
+
+  return next();
+});
+
+export const isAdmin = createMiddleware<AppEnv>(async (c, next) => {
+  const user = c.get("user");
+
+  if (!user) {
+    return c.json({ message: HttpStatusPhrases.UNAUTHORIZED }, HttpStatusCodes.UNAUTHORIZED);
+  }
+
+  const userRoles = user.role?.split(",") ?? [];
+  if (!userRoles.includes("admin")) {
+    return c.json({ message: HttpStatusPhrases.FORBIDDEN }, HttpStatusCodes.FORBIDDEN);
+  }
+
+  return next();
+});
+
+export function isAuthorizedTo(permissions: Partial<{
+  [K in keyof typeof statements]?: (typeof statements)[K][number][];
+}>) {
+  return createMiddleware<AppEnv>(async (c, next) => {
+    const user = c.get("user");
+
+    if (!user) {
+      return c.json({ message: HttpStatusPhrases.UNAUTHORIZED }, HttpStatusCodes.UNAUTHORIZED);
     }
 
-    const auth = configureAuth(db, emailer);
+    const userRoles = user.role?.split(",") ?? [];
+    const auth = c.get("auth");
 
-    c.set("auth", auth);
+    const results = await promiseAllSettled(userRoles.map(async (userRole) => {
+      if (!(userRole in roles)) {
+        return { success: false, error: "Invalid role" };
+      }
 
-    const session = await auth.api.getSession({ headers: c.req.raw.headers });
+      return await auth.api.userHasPermission({
+        body: {
+          role: userRole as keyof typeof roles,
+          permissions,
+        },
+      });
+    }));
 
-    if (!session) {
-      c.set("user", null);
-      c.set("session", null);
+    if (results.some(r => r.success)) {
       return next();
     }
 
-    c.set("user", session.user);
-    c.set("session", session.session);
-    return next();
-  };
-}
-
-export function isAdmin<R extends RouteConfig>(handler: AppRouteHandler<R>) {
-  return (c: Context, next: Next) => {
-    const user = c.get("user");
-    if (!user || user.role !== "admin") {
-      return c.json({ error: "Unauthorized" }, 401);
-    }
-    return handler(c, next);
-  };
-}
-
-export function isAuthenticated<R extends RouteConfig>(handler: AppRouteHandler<R>) {
-  return (c: Context, next: Next) => {
-    const user = c.get("user");
-    if (!user) {
-      return c.json({ error: "Unauthorized" }, 401);
-    }
-    return handler(c, next);
-  };
+    return c.json({ message: HttpStatusPhrases.FORBIDDEN }, HttpStatusCodes.FORBIDDEN);
+  });
 }

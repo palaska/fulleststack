@@ -3,9 +3,11 @@ import type { Emailer } from "@fulleststack/email";
 import { expo } from "@better-auth/expo";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { admin, openAPI } from "better-auth/plugins";
+import { admin as adminPlugin, openAPI } from "better-auth/plugins";
 
 import type { accounts, sessions, users } from "@/api/db/auth.schema";
+
+import { ac, defaultRole, roles } from "@/api/lib/permissions";
 
 import type { Db } from "../db";
 
@@ -14,6 +16,10 @@ import { trustedOrigins } from "./constants";
 export type User = typeof users.$inferInsert;
 export type Session = typeof sessions.$inferInsert;
 export type Account = typeof accounts.$inferInsert;
+
+export function hasRole(user: User, role: keyof typeof roles) {
+  return user.role?.split(",").includes(role);
+}
 
 export function configureAuth(db: Db, emailer: Emailer) {
   return betterAuth({
@@ -30,7 +36,11 @@ export function configureAuth(db: Db, emailer: Emailer) {
       },
     },
     plugins: [
-      admin(),
+      adminPlugin({
+        defaultRole,
+        ac,
+        roles,
+      }),
       openAPI(),
       expo(),
     ],
