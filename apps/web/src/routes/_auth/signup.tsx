@@ -6,25 +6,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import {
-  Alert,
-  AuthLayout,
-  Button,
-  Checkbox,
-  CheckboxField,
-  ErrorMessage,
-  Field,
-  Heading,
-  Input,
-  Label,
-  Logo,
-  Select,
-  Strong,
-  Text,
-  TextLink,
-} from "@/web/components";
-import { BASE_URL, signUp } from "@/web/lib/auth-client";
-import { getAuthErrorMessage } from "@/web/lib/auth-errors";
+import { Alert, AuthLayout, Button, Checkbox, CheckboxField, ErrorMessage, Field, Heading, Input, Label, Logo, Select, Spinner, Strong, Text, TextLink } from "@/web/components";
+import { BASE_URL, getAuthError, signUp } from "@/web/lib/auth-client";
 
 export const Route = createFileRoute("/_auth/signup")({
   component: SignUp,
@@ -44,6 +27,7 @@ const schema = z.object({
 });
 
 function SignUp() {
+  const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<{ title: string; description: string } | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const { redirect } = Route.useSearch();
@@ -65,6 +49,7 @@ function SignUp() {
   const onSubmit: SubmitHandler<z.infer<typeof schema>> = async (data) => {
     setErrorMessage(null);
     setShowSuccess(false);
+    setIsLoading(true);
     await signUp.email({
       email: data.email,
       password: data.password,
@@ -72,14 +57,13 @@ function SignUp() {
       callbackURL: `${BASE_URL}${redirect ?? "/"}`,
     }, {
       onError: (ctx) => {
-        if (ctx.error.code) {
-          setErrorMessage(getAuthErrorMessage(ctx.error.code as any));
-        }
+        setErrorMessage(getAuthError({ code: ctx.error.code, fallbackMessage: ctx.error.message }));
       },
       onSuccess: () => {
         setShowSuccess(true);
       },
     });
+    setIsLoading(false);
   };
 
   return (
@@ -124,8 +108,8 @@ function SignUp() {
           <Checkbox name="remember" />
           <Label>Get emails about product updates and news.</Label>
         </CheckboxField>
-        <Button type="submit" className="w-full">
-          Create account
+        <Button disabled={isLoading} type="submit" className="w-full">
+          {isLoading ? <Spinner /> : "Create account"}
         </Button>
         <Text>
           Already have an account?

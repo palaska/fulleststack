@@ -6,9 +6,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Alert, AuthLayout, Button, Checkbox, CheckboxField, ErrorMessage, Field, Heading, Input, Label, Logo, Strong, Text, TextLink } from "@/web/components";
-import { signIn } from "@/web/lib/auth-client";
-import { getAuthErrorMessage } from "@/web/lib/auth-errors";
+import { Alert, AuthLayout, Button, Checkbox, CheckboxField, ErrorMessage, Field, Heading, Input, Label, Logo, Spinner, Strong, Text, TextLink } from "@/web/components";
+import { getAuthError, signIn } from "@/web/lib/auth-client";
 
 export const Route = createFileRoute("/_auth/signin")({
   component: SignIn,
@@ -23,6 +22,7 @@ const schema = z.object({
 });
 
 function SignIn() {
+  const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<{ title: string; description: string } | null>(null);
   const { redirect } = Route.useSearch();
   const navigate = useNavigate();
@@ -41,20 +41,20 @@ function SignIn() {
 
   const onSubmit: SubmitHandler<z.infer<typeof schema>> = async (data) => {
     setErrorMessage(null);
+    setIsLoading(true);
     await signIn.email({
       email: data.email,
       password: data.password,
       rememberMe: true,
     }, {
       onError: (ctx) => {
-        if (ctx.error.code) {
-          setErrorMessage(getAuthErrorMessage(ctx.error.code as any));
-        }
+        setErrorMessage(getAuthError({ code: ctx.error.code, fallbackMessage: ctx.error.message }));
       },
       onSuccess: () => {
         navigate({ to: redirect ?? "/" });
       },
     });
+    setIsLoading(false);
   };
 
   return (
@@ -87,7 +87,7 @@ function SignIn() {
           </Text>
         </div>
         <Button type="submit" className="w-full">
-          Sign in
+          {isLoading ? <Spinner /> : "Sign in"}
         </Button>
         <Text>
           Don't have an account?
