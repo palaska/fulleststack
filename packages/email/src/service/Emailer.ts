@@ -2,10 +2,26 @@ import type { CreateEmailOptions } from "resend";
 
 import { Resend } from "resend";
 
-import type { PasswordChangedEmailProps, PasswordChangedSubjectProps, ResetPasswordEmailProps, ResetPasswordSubjectProps } from "../templates";
-import type { BaseSendMailOptions, EmailEnv, EmailTemplate, SendMailViaTemplateOptions } from "../types";
+import type {
+  PasswordChangedEmailProps,
+  PasswordChangedSubjectProps,
+  ResetPasswordEmailProps,
+  ResetPasswordSubjectProps,
+  VerifyEmailProps,
+  VerifyEmailSubjectProps,
+} from "../templates";
+import type {
+  BaseSendMailOptions,
+  EmailEnv,
+  EmailTemplate,
+  SendMailViaTemplateOptions,
+} from "../types";
 
-import { PasswordChangedTemplate, ResetPasswordTemplate } from "../templates";
+import {
+  PasswordChangedTemplate,
+  ResetPasswordTemplate,
+  VerifyEmailTemplate,
+} from "../templates";
 
 export class Emailer {
   private readonly resend: Resend;
@@ -30,6 +46,10 @@ export class Emailer {
 
   async passwordChanged(props: BaseSendMailOptions & PasswordChangedSubjectProps & PasswordChangedEmailProps) {
     return this.sendUsingTemplate(PasswordChangedTemplate, props);
+  }
+
+  async verifyEmail(props: BaseSendMailOptions & VerifyEmailSubjectProps & VerifyEmailProps) {
+    return this.sendUsingTemplate(VerifyEmailTemplate, props);
   }
 
   private async sendUsingTemplate<S, B>(template: EmailTemplate<S, B>, opts: SendMailViaTemplateOptions<S, B>) {

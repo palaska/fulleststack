@@ -1,13 +1,13 @@
 import type { SubmitHandler } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Alert, AuthLayout, Button, Checkbox, CheckboxField, ErrorMessage, Field, Heading, Input, Label, Logo, Select, Strong, Text, TextLink } from "@/web/components";
-import { signUp } from "@/web/lib/auth-client";
+import { Alert, AuthLayout, Button, Checkbox, CheckboxField, ErrorMessage, Field, Heading, Input, Label, Logo, Select, Spinner, Strong, Text, TextLink } from "@/web/components";
+import { BASE_URL, getAuthError, signUp } from "@/web/lib/auth-client";
 
 export const Route = createFileRoute("/_auth/signup")({
   component: SignUp,
@@ -27,9 +27,10 @@ const schema = z.object({
 });
 
 function SignUp() {
-  const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<{ title: string; description: string } | null>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
   const { redirect } = Route.useSearch();
-  const navigate = useNavigate();
 
   const {
     register,
@@ -46,19 +47,23 @@ function SignUp() {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof schema>> = async (data) => {
-    setHasError(false);
-    const res = await signUp.email({
+    setErrorMessage(null);
+    setShowSuccess(false);
+    setIsLoading(true);
+    await signUp.email({
       email: data.email,
       password: data.password,
       name: data.name,
+      callbackURL: `${BASE_URL}${redirect ?? "/"}`,
+    }, {
+      onError: (ctx) => {
+        setErrorMessage(getAuthError({ code: ctx.error.code, fallbackMessage: ctx.error.message }));
+      },
+      onSuccess: () => {
+        setShowSuccess(true);
+      },
     });
-
-    if (res.error) {
-      setHasError(true);
-    }
-    else {
-      navigate({ to: redirect ?? "/" });
-    }
+    setIsLoading(false);
   };
 
   return (
@@ -66,9 +71,13 @@ function SignUp() {
       <form onSubmit={handleSubmit(onSubmit)} className="grid w-full max-w-sm grid-cols-1 gap-8">
         <Logo className="h-16 text-zinc-950 dark:text-white forced-colors:text-[CanvasText]" />
         <Heading>Create your account</Heading>
-        {hasError && (
-          <Alert variant="error" title="An error has occurred" description="Authentication failed. Please try again." />
-        )}
+        {errorMessage
+          ? (
+              <Alert variant="error" title={errorMessage.title} description={errorMessage.description} />
+            )
+          : showSuccess && (
+            <Alert variant="info" title="Verification Required" description="Verification email sent. Please verify your email." />
+          )}
         <Field>
           <Label>Email</Label>
           <Input {...register("email")} type="email" required autoComplete="email" />
@@ -99,8 +108,8 @@ function SignUp() {
           <Checkbox name="remember" />
           <Label>Get emails about product updates and news.</Label>
         </CheckboxField>
-        <Button type="submit" className="w-full">
-          Create account
+        <Button disabled={isLoading} type="submit" className="w-full">
+          {isLoading ? <Spinner /> : "Create account"}
         </Button>
         <Text>
           Already have an account?

@@ -6,8 +6,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Alert, AuthLayout, Button, Checkbox, CheckboxField, ErrorMessage, Field, Heading, Input, Label, Logo, Strong, Text, TextLink } from "@/web/components";
-import { signIn } from "@/web/lib/auth-client";
+import { Alert, AuthLayout, Button, Checkbox, CheckboxField, ErrorMessage, Field, Heading, Input, Label, Logo, Spinner, Strong, Text, TextLink } from "@/web/components";
+import { getAuthError, signIn } from "@/web/lib/auth-client";
 
 export const Route = createFileRoute("/_auth/signin")({
   component: SignIn,
@@ -22,7 +22,8 @@ const schema = z.object({
 });
 
 function SignIn() {
-  const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<{ title: string; description: string } | null>(null);
   const { redirect } = Route.useSearch();
   const navigate = useNavigate();
 
@@ -39,27 +40,30 @@ function SignIn() {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof schema>> = async (data) => {
-    setHasError(false);
-    const res = await signIn.email({
+    setErrorMessage(null);
+    setIsLoading(true);
+    await signIn.email({
       email: data.email,
       password: data.password,
       rememberMe: true,
+    }, {
+      onError: (ctx) => {
+        setErrorMessage(getAuthError({ code: ctx.error.code, fallbackMessage: ctx.error.message }));
+      },
+      onSuccess: () => {
+        navigate({ to: redirect ?? "/" });
+      },
     });
-
-    if (res.error) {
-      setHasError(true);
-    }
-    else {
-      navigate({ to: redirect ?? "/" });
-    }
+    setIsLoading(false);
   };
+
   return (
     <AuthLayout>
       <form onSubmit={handleSubmit(onSubmit)} className="grid w-full max-w-sm grid-cols-1 gap-8">
         <Logo className="h-16 text-zinc-950 dark:text-white forced-colors:text-[CanvasText]" />
         <Heading>Sign in to your account</Heading>
-        {hasError && (
-          <Alert variant="error" title="An error has occurred" description="Authentication failed. Please try again." />
+        {errorMessage && (
+          <Alert variant="error" title={errorMessage.title} description={errorMessage.description} />
         )}
         <Field>
           <Label>Email</Label>
@@ -82,11 +86,11 @@ function SignIn() {
             </TextLink>
           </Text>
         </div>
-        <Button type="submit" className="w-full">
-          Sign in
+        <Button disabled={isLoading} type="submit" className="w-full">
+          {isLoading ? <Spinner /> : "Sign in"}
         </Button>
         <Text>
-          Don’t have an account?
+          Don't have an account?
           {" "}
           <TextLink to="/signup">
             <Strong>Sign up</Strong>
