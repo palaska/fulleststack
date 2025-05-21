@@ -24,6 +24,7 @@ import {
   TextLink,
 } from "@/web/components";
 import { BASE_URL, signUp } from "@/web/lib/auth-client";
+import { getAuthErrorMessage } from "@/web/lib/auth-errors";
 
 export const Route = createFileRoute("/_auth/signup")({
   component: SignUp,
@@ -43,7 +44,7 @@ const schema = z.object({
 });
 
 function SignUp() {
-  const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<{ title: string; description: string } | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const { redirect } = Route.useSearch();
 
@@ -62,21 +63,23 @@ function SignUp() {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof schema>> = async (data) => {
-    setHasError(false);
+    setErrorMessage(null);
     setShowSuccess(false);
-    const res = await signUp.email({
+    await signUp.email({
       email: data.email,
       password: data.password,
       name: data.name,
       callbackURL: `${BASE_URL}${redirect ?? "/"}`,
+    }, {
+      onError: (ctx) => {
+        if (ctx.error.code) {
+          setErrorMessage(getAuthErrorMessage(ctx.error.code as any));
+        }
+      },
+      onSuccess: () => {
+        setShowSuccess(true);
+      },
     });
-
-    if (res.error) {
-      setHasError(true);
-    }
-    else {
-      setShowSuccess(true);
-    }
   };
 
   return (
@@ -84,9 +87,9 @@ function SignUp() {
       <form onSubmit={handleSubmit(onSubmit)} className="grid w-full max-w-sm grid-cols-1 gap-8">
         <Logo className="h-16 text-zinc-950 dark:text-white forced-colors:text-[CanvasText]" />
         <Heading>Create your account</Heading>
-        {hasError
+        {errorMessage
           ? (
-              <Alert variant="error" title="An error has occurred" description="Authentication failed. Please try again." />
+              <Alert variant="error" title={errorMessage.title} description={errorMessage.description} />
             )
           : showSuccess && (
             <Alert variant="info" title="Verification Required" description="Verification email sent. Please verify your email." />

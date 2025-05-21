@@ -8,6 +8,7 @@ import { z } from "zod";
 
 import { Alert, AuthLayout, Button, Checkbox, CheckboxField, ErrorMessage, Field, Heading, Input, Label, Logo, Strong, Text, TextLink } from "@/web/components";
 import { signIn } from "@/web/lib/auth-client";
+import { getAuthErrorMessage } from "@/web/lib/auth-errors";
 
 export const Route = createFileRoute("/_auth/signin")({
   component: SignIn,
@@ -22,11 +23,7 @@ const schema = z.object({
 });
 
 function SignIn() {
-  const [hasError, setHasError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<{ title: string; description: string }>({
-    title: "An error has occurred",
-    description: "Authentication failed. Please try again.",
-  });
+  const [errorMessage, setErrorMessage] = useState<{ title: string; description: string } | null>(null);
   const { redirect } = Route.useSearch();
   const navigate = useNavigate();
 
@@ -43,35 +40,29 @@ function SignIn() {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof schema>> = async (data) => {
-    setHasError(false);
-    const res = await signIn.email({
+    setErrorMessage(null);
+    await signIn.email({
       email: data.email,
       password: data.password,
       rememberMe: true,
     }, {
       onError: (ctx) => {
-        if (ctx.error.status === 403) {
-          setErrorMessage({
-            title: "Verification Required",
-            description: "Please verify your email",
-          });
+        if (ctx.error.code) {
+          setErrorMessage(getAuthErrorMessage(ctx.error.code as any));
         }
       },
+      onSuccess: () => {
+        navigate({ to: redirect ?? "/" });
+      },
     });
-
-    if (res.error) {
-      setHasError(true);
-    }
-    else {
-      navigate({ to: redirect ?? "/" });
-    }
   };
+
   return (
     <AuthLayout>
       <form onSubmit={handleSubmit(onSubmit)} className="grid w-full max-w-sm grid-cols-1 gap-8">
         <Logo className="h-16 text-zinc-950 dark:text-white forced-colors:text-[CanvasText]" />
         <Heading>Sign in to your account</Heading>
-        {hasError && (
+        {errorMessage && (
           <Alert variant="error" title={errorMessage.title} description={errorMessage.description} />
         )}
         <Field>
