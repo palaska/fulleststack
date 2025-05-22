@@ -4,6 +4,8 @@ import type { z } from "zod";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
+import { users } from "./auth.schema";
+
 export const tasks = sqliteTable("tasks", {
   id: integer({ mode: "number" })
     .primaryKey({ autoIncrement: true }),
@@ -12,6 +14,9 @@ export const tasks = sqliteTable("tasks", {
   done: integer({ mode: "boolean" })
     .notNull()
     .default(false),
+  createdBy: text()
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
   createdAt: integer({ mode: "timestamp" })
     .notNull()
     .$defaultFn(() => new Date()),
@@ -32,6 +37,7 @@ export const insertTasksSchema = createInsertSchema(
   done: true,
 }).omit({
   id: true,
+  createdBy: true,
   createdAt: true,
   updatedAt: true,
 });

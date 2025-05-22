@@ -27,7 +27,7 @@ export default function createApp() {
     .basePath(BASE_PATH) as AppOpenAPI;
 
   // Adding env validation as first middleware
-  app.use(validateAndAttachEnv());
+  app.use(validateAndAttachEnv);
 
   // RequestID before logger so logs can include the ID
   app.use(requestId());
@@ -52,9 +52,9 @@ export default function createApp() {
   }));
 
   app.use(serveEmojiFavicon("📝"))
-    .use(attachDb())
-    .use(attachEmailer())
-    .use(attachAuthEntities()) // depends on emailer and db to be attached first
+    .use(attachDb)
+    .use(attachEmailer)
+    .use(attachAuthEntities) // depends on emailer and db to be attached first
     .on(["POST", "GET"], "/auth/**", (c) => {
       return c.get("auth").handler(c.req.raw);
     });
