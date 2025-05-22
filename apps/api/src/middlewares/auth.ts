@@ -1,13 +1,11 @@
-import { promiseAllSettled } from "@fulleststack/common";
 import { createMiddleware } from "hono/factory";
 import * as HttpStatusCodes from "stoker/http-status-codes";
 import * as HttpStatusPhrases from "stoker/http-status-phrases";
 
-import type { statements } from "@/api/lib/permissions";
+import type { statements } from "@/api/lib/auth";
 import type { AppEnv } from "@/api/lib/types";
 
-import { configureAuth } from "@/api/lib/auth";
-import { roles } from "@/api/lib/permissions";
+import { configureAuth, hasPermission, hasRole } from "@/api/lib/auth";
 
 export const attachAuthEntities = createMiddleware<AppEnv>(async (c, next) => {
   const db = c.get("db");
@@ -51,12 +49,11 @@ export const isAdmin = createMiddleware<AppEnv>(async (c, next) => {
     return c.json({ message: HttpStatusPhrases.UNAUTHORIZED }, HttpStatusCodes.UNAUTHORIZED);
   }
 
-  const userRoles = user.role?.split(",") ?? [];
-  if (!userRoles.includes("admin")) {
-    return c.json({ message: HttpStatusPhrases.FORBIDDEN }, HttpStatusCodes.FORBIDDEN);
+  if (hasRole(user, "admin")) {
+    return next();
   }
 
-  return next();
+  return c.json({ message: HttpStatusPhrases.FORBIDDEN }, HttpStatusCodes.FORBIDDEN);
 });
 
 export function isAuthorizedTo(permissions: Partial<{
@@ -69,23 +66,13 @@ export function isAuthorizedTo(permissions: Partial<{
       return c.json({ message: HttpStatusPhrases.UNAUTHORIZED }, HttpStatusCodes.UNAUTHORIZED);
     }
 
-    const userRoles = user.role?.split(",") ?? [];
-    const auth = c.get("auth");
+    console.log("user", user.role);
+    const canAccess = hasPermission({
+      role: user.role,
+      permissions,
+    });
 
-    const results = await promiseAllSettled(userRoles.map(async (userRole) => {
-      if (!(userRole in roles)) {
-        return { success: false, error: "Invalid role" };
-      }
-
-      return await auth.api.userHasPermission({
-        body: {
-          role: userRole as keyof typeof roles,
-          permissions,
-        },
-      });
-    }));
-
-    if (results.some(r => r.success)) {
+    if (canAccess) {
       return next();
     }
 
