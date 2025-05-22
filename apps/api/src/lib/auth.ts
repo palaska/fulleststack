@@ -53,6 +53,14 @@ export const roles = {
 };
 
 /**
+ * Admin plugin configuration with access control and roles
+ */
+export const adminOptions: AdminOptions & { roles: { [key in string]?: Role; } } = {
+  ac,
+  roles,
+};
+
+/**
  * Configure authentication system with database, email provider, and plugins
  * @param db Database instance
  * @param emailer Email service for sending auth-related emails
@@ -105,14 +113,6 @@ export type Session = typeof sessions.$inferInsert;
 export type Account = typeof accounts.$inferInsert;
 
 /**
- * Admin plugin configuration with access control and roles
- */
-export const adminOptions: AdminOptions & { roles: { [key in string]?: Role; } } = {
-  ac,
-  roles,
-};
-
-/**
  * Check if a user has a specific role
  * @param user User object to check
  * @param role Role to verify
@@ -125,6 +125,9 @@ export function hasRole(user: User, role: keyof typeof roles) {
 /**
  * Check if a user has permission to perform an action
  * @param input Object containing userId, role, and required permissions
+ * @param input.userId User ID to check
+ * @param input.role Role to check
+ * @param input.permissions Permissions to check
  * @returns True if the user has the necessary permissions
  */
 export function hasPermission(input: {

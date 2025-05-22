@@ -22,7 +22,6 @@ function RouteComponent() {
 
   const {
     control,
-    register,
     handleSubmit,
     formState: { isDirty },
   } = useForm<patchTasksSchema>({

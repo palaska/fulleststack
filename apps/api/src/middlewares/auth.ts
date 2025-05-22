@@ -66,7 +66,6 @@ export function isAuthorizedTo(permissions: Partial<{
       return c.json({ message: HttpStatusPhrases.UNAUTHORIZED }, HttpStatusCodes.UNAUTHORIZED);
     }
 
-    console.log("user", user.role);
     const canAccess = hasPermission({
       role: user.role,
       permissions,
