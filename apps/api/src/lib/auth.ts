@@ -86,6 +86,7 @@ export function configureAuth(db: Db, emailer: Emailer, env: Environment) {
     emailVerification: {
       sendOnSignUp: true,
       autoSignInAfterVerification: true,
+      expiresIn: 60 * 60, // 1 hour
       sendVerificationEmail: async ({ user, token }) => {
         const url = `${env.WEB_URL}/verify-email?token=${token}`;
         await emailer.verifyEmail({ to: user.email, name: user.name, url });
