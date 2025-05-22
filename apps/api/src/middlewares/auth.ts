@@ -1,3 +1,4 @@
+import { notNullable } from "@fulleststack/common";
 import { createMiddleware } from "hono/factory";
 import * as HttpStatusCodes from "stoker/http-status-codes";
 import * as HttpStatusPhrases from "stoker/http-status-phrases";
@@ -6,7 +7,6 @@ import type { statements } from "@/api/lib/auth";
 import type { AppEnv } from "@/api/lib/types";
 
 import { configureAuth, hasPermission, hasRole } from "@/api/lib/auth";
-import { notNullable } from "@fulleststack/common";
 
 export const attachAuthEntities = createMiddleware<AppEnv>(async (c, next) => {
   const db = c.get("db");
