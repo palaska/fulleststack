@@ -21,4 +21,4 @@ const env = validateEnv(process.env);
 const db = createDb(env);
 const emailer = new Emailer(env);
 
-export const auth = configureAuth(db, emailer);
+export const auth = configureAuth(db, emailer, env);
