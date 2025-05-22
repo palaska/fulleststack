@@ -124,33 +124,21 @@ export function hasRole(user: User, role: keyof typeof roles) {
 
 /**
  * Check if a user has permission to perform an action
- * @param input Object containing userId, role, and required permissions
- * @param input.userId User ID to check
- * @param input.role Role to check
- * @param input.permissions Permissions to check
+ * @param role Role to check
+ * @param permissions Permissions to check
  * @returns True if the user has the necessary permissions
  */
-export function hasPermission(input: {
-  userId?: string;
-  role?: string | null;
+export function hasPermission({ role, permissions }: {
+  role: string;
   permissions: { [key: string]: string[] };
 }) {
-  // Admin users always have permission
-  if (input.userId && adminOptions?.adminUserIds?.includes(input.userId)) {
-    return true;
-  }
-
-  if (!input.permissions) {
-    return false;
-  }
-
   // Check each role the user has
-  const roles = (input.role || adminOptions?.defaultRole || "user").split(",");
+  const roles = (role || adminOptions?.defaultRole || "user").split(",");
   const acRoles = adminOptions.roles;
 
   for (const role of roles) {
     const _role = acRoles[role as keyof typeof acRoles];
-    const result = _role?.authorize(input.permissions);
+    const result = _role?.authorize(permissions);
     if (result?.success) {
       return true;
     }

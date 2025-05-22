@@ -6,6 +6,7 @@ import type { statements } from "@/api/lib/auth";
 import type { AppEnv } from "@/api/lib/types";
 
 import { configureAuth, hasPermission, hasRole } from "@/api/lib/auth";
+import { notNullable } from "@fulleststack/common";
 
 export const attachAuthEntities = createMiddleware<AppEnv>(async (c, next) => {
   const db = c.get("db");
@@ -67,7 +68,7 @@ export function isAuthorizedTo(permissions: Partial<{
     }
 
     const canAccess = hasPermission({
-      role: user.role,
+      role: notNullable(user.role),
       permissions,
     });
 
