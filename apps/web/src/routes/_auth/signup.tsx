@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Alert, AuthLayout, Button, Checkbox, CheckboxField, ErrorMessage, Field, Heading, Input, Label, Logo, Select, Spinner, Strong, Text, TextLink } from "@/web/components";
-import { BASE_URL, getAuthError, signUp } from "@/web/lib/auth-client";
+import { authClient, BASE_URL, getAuthError, signUp } from "@/web/lib/auth-client";
 
 export const Route = createFileRoute("/_auth/signup")({
   component: SignUp,
@@ -46,10 +46,22 @@ function SignUp() {
     resolver: zodResolver(schema),
   });
 
+  // 1️⃣ Send the OTP
+  const sendOtp: SubmitHandler<z.infer<typeof schema>> = async (data) => {
+    const res = await authClient.emailOtp.sendVerificationOtp({
+      email: data.email,
+      type: "sign-in", // this will create the user if they don't exist
+    });
+    console.log("OTP sent res", res);
+  };
+
   const onSubmit: SubmitHandler<z.infer<typeof schema>> = async (data) => {
+    await sendOtp(data);
+
     setErrorMessage(null);
     setShowSuccess(false);
     setIsLoading(true);
+
     await signUp.email({
       email: data.email,
       password: data.password,

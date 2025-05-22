@@ -10,7 +10,7 @@ import type { AdminOptions } from "better-auth/plugins/admin";
 import { expo } from "@better-auth/expo";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { admin, openAPI } from "better-auth/plugins";
+import { admin, emailOTP, openAPI } from "better-auth/plugins";
 import { createAccessControl } from "better-auth/plugins/access";
 import { adminAc, defaultStatements } from "better-auth/plugins/admin/access";
 
@@ -81,17 +81,38 @@ export function configureAuth(db: Db, emailer: Emailer) {
         await emailer.resetPassword({ to: user.email, name: user.name, url });
       },
     },
-    emailVerification: {
-      sendOnSignUp: true,
-      autoSignInAfterVerification: true,
-      sendVerificationEmail: async ({ user, url }) => {
-        await emailer.verifyEmail({ to: user.email, name: user.name, url });
-      },
-    },
+    // emailVerification: {
+    //   sendOnSignUp: true,
+    //   autoSignInAfterVerification: true,
+    //   sendVerificationEmail: async ({ user, url }) => {
+    //     await emailer.verifyEmail({ to: user.email, name: user.name, url });
+    //   },
+    // },
     plugins: [
       admin(adminOptions),
       openAPI(),
       expo(),
+      emailOTP({
+        // automatically send an OTP when someone first signs in
+        sendVerificationOnSignUp: true,
+
+        // the hook that actually sends the mail
+        async sendVerificationOTP({ email, otp, type }) {
+          console.log("sendVerificationOTP", email, otp, type);
+          // you can customize subject / HTML however you like
+          await emailer.sendEmail({
+            from: "no-reply@yourapp.com",
+            to: email,
+            subject: `Your verification code`,
+            html: `<p>Your code is <strong>${otp}</strong>. It expires in 5 minutes.</p>`,
+          });
+        },
+
+        // optional tweaks:
+        otpLength: 6, // digits
+        expiresIn: 300, // seconds
+        allowedAttempts: 3, // retries before invalidation
+      }),
     ],
     session: {
       cookieCache: {
