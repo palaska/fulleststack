@@ -24,11 +24,12 @@ export const signOut = authClient.signOut;
 export const signUp = authClient.signUp;
 export const forgetPassword = authClient.forgetPassword;
 export const resetPassword = authClient.resetPassword;
+export const verifyEmail = authClient.verifyEmail;
 
 export type Session = typeof authClient.$Infer.Session.session;
 export type User = typeof authClient.$Infer.Session.user;
 
-type AuthError = {
+export type AuthError = {
   title: string;
   description: string;
 };
@@ -65,5 +66,35 @@ export function getAuthError(
   return {
     title: "Authentication Error",
     description: fallbackMessage ?? "An unexpected error occurred. Please try again.",
+  };
+}
+
+type VerifyEmailErrorTypes = Partial<
+  Record<string, AuthError>
+>;
+
+const verifyEmailErrorCodes = {
+  invalid_token: {
+    title: "Invalid Link",
+    description: "The email verification link is invalid. Please try again.",
+  },
+  token_expired: {
+    title: "Link Expired",
+    description: "The email verification link has expired. Please try again.",
+  },
+  user_not_found: {
+    title: "An error occurred",
+    description: "An unexpected error occurred. Please try again.",
+  },
+} satisfies VerifyEmailErrorTypes;
+
+export function getVerifyEmailError(code: string): AuthError {
+  if (code in verifyEmailErrorCodes) {
+    return verifyEmailErrorCodes[code as keyof typeof verifyEmailErrorCodes];
+  }
+
+  return {
+    title: "An error occurred",
+    description: "An unexpected error occurred. Please try again.",
   };
 }

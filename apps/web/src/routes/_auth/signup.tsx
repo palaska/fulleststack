@@ -6,6 +6,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import type { AuthError } from "@/web/lib/auth-client";
+
 import { Alert, AuthLayout, Button, Checkbox, CheckboxField, ErrorMessage, Field, Heading, Input, Label, Logo, Select, Spinner, Strong, Text, TextLink } from "@/web/components";
 import { BASE_URL, getAuthError, signUp } from "@/web/lib/auth-client";
 
@@ -28,7 +30,7 @@ const schema = z.object({
 
 function SignUp() {
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<{ title: string; description: string } | null>(null);
+  const [errorMessage, setErrorMessage] = useState<AuthError | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const { redirect } = Route.useSearch();
 

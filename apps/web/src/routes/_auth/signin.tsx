@@ -6,6 +6,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import type { AuthError } from "@/web/lib/auth-client";
+
 import { Alert, AuthLayout, Button, Checkbox, CheckboxField, ErrorMessage, Field, Heading, Input, Label, Logo, Spinner, Strong, Text, TextLink } from "@/web/components";
 import { getAuthError, signIn } from "@/web/lib/auth-client";
 
@@ -23,7 +25,7 @@ const schema = z.object({
 
 function SignIn() {
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<{ title: string; description: string } | null>(null);
+  const [errorMessage, setErrorMessage] = useState<AuthError | null>(null);
   const { redirect } = Route.useSearch();
   const navigate = useNavigate();
 

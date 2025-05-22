@@ -17,6 +17,7 @@ import { adminAc, defaultStatements } from "better-auth/plugins/admin/access";
 import type { accounts, sessions, users } from "@/api/db/auth.schema";
 
 import type { Db } from "../db";
+import type { Environment } from "../env";
 
 import { trustedOrigins } from "./constants";
 
@@ -64,9 +65,10 @@ export const adminOptions: AdminOptions & { roles: { [key in string]?: Role; } }
  * Configure authentication system with database, email provider, and plugins
  * @param db Database instance
  * @param emailer Email service for sending auth-related emails
+ * @param env Environment variables
  * @returns Configured auth instance
  */
-export function configureAuth(db: Db, emailer: Emailer) {
+export function configureAuth(db: Db, emailer: Emailer, env: Environment) {
   return betterAuth({
     database: drizzleAdapter(db, {
       provider: "sqlite",
@@ -84,7 +86,9 @@ export function configureAuth(db: Db, emailer: Emailer) {
     emailVerification: {
       sendOnSignUp: true,
       autoSignInAfterVerification: true,
-      sendVerificationEmail: async ({ user, url }) => {
+      expiresIn: 60 * 60, // 1 hour
+      sendVerificationEmail: async ({ user, token }) => {
+        const url = `${env.WEB_URL}/verify-email?token=${token}`;
         await emailer.verifyEmail({ to: user.email, name: user.name, url });
       },
     },
