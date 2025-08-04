@@ -16,8 +16,9 @@ import { adminAc, defaultStatements } from "better-auth/plugins/admin/access";
 
 import type { accounts, sessions, users } from "@/api/db/auth.schema";
 
+import env from "@/api/env";
+
 import type { Db } from "../db";
-import type { Environment } from "../env";
 
 import { trustedOrigins } from "./constants";
 
@@ -65,10 +66,9 @@ export const adminOptions: AdminOptions & { roles: { [key in string]?: Role; } }
  * Configure authentication system with database, email provider, and plugins
  * @param db Database instance
  * @param emailer Email service for sending auth-related emails
- * @param env Environment variables
  * @returns Configured auth instance
  */
-export function configureAuth(db: Db, emailer: Emailer, env: Environment) {
+export function configureAuth(db: Db, emailer: Emailer) {
   return betterAuth({
     database: drizzleAdapter(db, {
       provider: "sqlite",

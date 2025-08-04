@@ -5,6 +5,7 @@ import * as HttpStatusPhrases from "stoker/http-status-phrases";
 
 import type { AppRouteHandler } from "@/api/lib/types";
 
+import db from "@/api/db";
 import { tasks } from "@/api/db/schema";
 import { hasRole } from "@/api/lib/auth";
 import { ZOD_ERROR_CODES, ZOD_ERROR_MESSAGES } from "@/api/lib/constants";
@@ -12,7 +13,6 @@ import { ZOD_ERROR_CODES, ZOD_ERROR_MESSAGES } from "@/api/lib/constants";
 import type { CreateRoute, GetOneRoute, ListRoute, PatchRoute, RemoveRoute } from "./tasks.routes";
 
 export const list: AppRouteHandler<ListRoute> = async (c) => {
-  const db = c.get("db");
   const tasks = await db.query.tasks.findMany({
     orderBy(fields, operators) {
       return operators.desc(fields.createdAt);
@@ -22,7 +22,6 @@ export const list: AppRouteHandler<ListRoute> = async (c) => {
 };
 
 export const create: AppRouteHandler<CreateRoute> = async (c) => {
-  const db = c.get("db");
   const user = notNullable(c.get("user"));
   const task = c.req.valid("json");
   const [inserted] = await db.insert(tasks).values({ ...task, createdBy: user.id }).returning();
@@ -30,7 +29,6 @@ export const create: AppRouteHandler<CreateRoute> = async (c) => {
 };
 
 export const getOne: AppRouteHandler<GetOneRoute> = async (c) => {
-  const db = c.get("db");
   const user = notNullable(c.get("user"));
   const { id } = c.req.valid("param");
   const task = await db.query.tasks.findFirst({
@@ -56,7 +54,6 @@ export const getOne: AppRouteHandler<GetOneRoute> = async (c) => {
 };
 
 export const patch: AppRouteHandler<PatchRoute> = async (c) => {
-  const db = c.get("db");
   const { id } = c.req.valid("param");
   const updates = c.req.valid("json");
 
@@ -97,7 +94,6 @@ export const patch: AppRouteHandler<PatchRoute> = async (c) => {
 };
 
 export const remove: AppRouteHandler<RemoveRoute> = async (c) => {
-  const db = c.get("db");
   const { id } = c.req.valid("param");
   const result = await db.delete(tasks)
     .where(eq(tasks.id, id));

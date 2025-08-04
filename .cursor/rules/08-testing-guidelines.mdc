@@ -12,8 +12,7 @@ The project uses different testing frameworks optimized for each platform: **Vit
 
 ### API Testing
 
-- **Framework**: Vitest with @cloudflare/vitest-pool-workers
-- **Environment**: Cloudflare Workers compatible testing
+- **Framework**: Vitest
 - **Database**: In-memory SQLite for isolation
 - **Mocking**: Built-in Vitest mocking capabilities
 

@@ -1,7 +1,19 @@
+/* eslint-disable node/no-process-env */
+import { config } from "dotenv";
+import { expand } from "dotenv-expand";
+import path from "node:path";
 import { z } from "zod";
+
+expand(config({
+  path: path.resolve(
+    process.cwd(),
+    process.env.NODE_ENV === "test" ? ".env.test" : ".env",
+  ),
+}));
 
 const EnvSchema = z.object({
   ENVIRONMENT: z.string().default("development"),
+  PORT: z.coerce.number().default(8787),
   LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"]),
   TURSO_URL: z.string().url(),
   TURSO_AUTH_TOKEN: z.string().optional(),
@@ -33,3 +45,5 @@ export function validateEnv(env: unknown) {
 
   return result.data;
 }
+
+export default validateEnv(process.env);

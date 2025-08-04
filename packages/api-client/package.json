@@ -15,7 +15,6 @@
     "hono": "workspace:*"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "workspace:*",
     "@fulleststack/eslint-config": "workspace:^",
     "@types/node": "workspace:*",
     "typescript": "workspace:*"

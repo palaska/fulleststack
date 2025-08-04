@@ -15,7 +15,7 @@ The API is built with **Hono** framework deployed on **Cloudflare Workers**, fol
 - **Validation**: Zod schemas with drizzle-zod integration
 - **Documentation**: Scalar API documentation
 - **Logging**: Pino logger with hono-pino middleware
-- **Testing**: Vitest with @cloudflare/vitest-pool-workers
+- **Testing**: Vitest
 
 ## Architecture Patterns
 

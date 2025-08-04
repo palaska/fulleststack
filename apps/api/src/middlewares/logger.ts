@@ -6,10 +6,12 @@ import pino from "pino";
 
 import type { AppEnv } from "@/api/lib/types";
 
+import env from "@/api/env";
+
 export function pinoLogger() {
   return ((c, next) => {
     // Safely determine if we should use pretty logger
-    const isPrettyLogger = c.env.ENVIRONMENT !== "production";
+    const isPrettyLogger = env.ENVIRONMENT !== "production";
     const transport = isPrettyLogger
       ? {
           target: "pino-pretty",
@@ -21,7 +23,7 @@ export function pinoLogger() {
 
     return logger({
       pino: pino({
-        level: c.env.LOG_LEVEL || "info",
+        level: env.LOG_LEVEL || "info",
         transport,
       }),
       http: {
