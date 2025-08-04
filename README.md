@@ -1,6 +1,6 @@
 # Hono + React / Vite + Cloudflare + pnpm workspaces monorepo
 
-A monorepo setup using pnpm workspaces with a Hono API and React / vite client deployed to Cloudflare Workers / Static Assets / Turso.
+A monorepo setup using pnpm workspaces with a Hono API and React / vite client deployed as a NodeJS server.
 
 Features:
 
@@ -53,7 +53,7 @@ Tour:
   - `ui`: Shared React UI components.
 - Base [eslint.config.js](./packages/eslint-config/eslint.config.js) with default settings
 - Applications live in [/apps] directory
-  - `api`: Hono backend application deployed to Cloudflare Workers, using Drizzle ORM with Turso.
+  - `api`: Hono backend application deployed as a NodeJS server, using Drizzle ORM with Turso.
     - Features `better-auth` for authentication, configured in `src/lib/better-auth.config.ts`. Auth-related database schema is generated via `pnpm --filter api generate-auth-schema`.
   - `db`: Contains a local Turso development database setup and data.
   - `mobile`: Expo (React Native) mobile application.
@@ -73,18 +73,19 @@ pnpm i
 
 ### Configure Turso Database
 
-Create a `.dev.vars` file in the `apps/api` directory using the example file as a template:
+Create a `.env` file in the `apps/api` directory using the example file as a template:
 
 ```sh
-cp apps/api/.dev.vars.example apps/api/.dev.vars
+cp apps/api/.env.example apps/api/.env
 ```
 
-Update the values in the `.dev.vars` file with your Turso credentials.
+Update the values in the `.env` file with your Turso credentials.
 
 ### Run DB migrations locally
 
 This command applies migrations to your local Turso database if you are using `turso dev` or a local libSQL file.
 If you are using a remote Turso dev database, configure `apps/api/drizzle.config.ts` accordingly or use the production migration command.
+
 ```sh
 pnpm --filter api db:push
 ```
@@ -104,6 +105,7 @@ All requests to `/api` will be proxied to the hono server running on [http://loc
 ### Run DB migrations on Turso
 
 This command applies migrations to your production Turso database. Ensure `apps/api/drizzle.config.ts` is configured for your production database.
+
 ```sh
 pnpm --filter api db:push
 ```
