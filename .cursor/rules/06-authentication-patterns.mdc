@@ -85,7 +85,6 @@ Attach authentication entities to the Hono context:
 
 ```typescript
 export async function attachAuthEntities(c: Context, next: Next) {
-  const auth = c.get("auth");
   const session = await auth.api.getSession({ headers: c.req.raw.headers });
 
   c.set("user", session?.user || null);

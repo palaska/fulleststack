@@ -9,7 +9,7 @@ import { pinoLogger } from "@/api/middlewares/logger";
 
 import type { AppOpenAPI } from "./types";
 
-import { attachEmailer } from "../middlewares/emailer";
+import auth from "./auth";
 import { BASE_PATH, trustedOrigins } from "./constants";
 import createRouter from "./create-router";
 
@@ -19,7 +19,7 @@ export default function createApp() {
       if (c.req.path.startsWith(BASE_PATH)) {
         return next();
       }
-      return serveStatic({ root: "./public/index.html" })(c, next);
+      return serveStatic({ root: "../web/dist/index.html" })(c, next);
     })
     .basePath(BASE_PATH) as AppOpenAPI;
 
@@ -46,10 +46,9 @@ export default function createApp() {
   }));
 
   app.use(serveEmojiFavicon("📝"))
-    .use(attachEmailer)
     .use(attachAuthEntities) // depends on emailer and db to be attached first
     .on(["POST", "GET"], "/auth/**", (c) => {
-      return c.get("auth").handler(c.req.raw);
+      return auth.handler(c.req.raw);
     });
 
   app.notFound(notFound);

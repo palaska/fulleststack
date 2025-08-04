@@ -3,7 +3,6 @@
  * Uses better-auth library to manage users, sessions, and permissions
  */
 
-import type { Emailer } from "@fulleststack/email";
 import type { Role } from "better-auth/plugins/access";
 import type { AdminOptions } from "better-auth/plugins/admin";
 
@@ -16,11 +15,11 @@ import { adminAc, defaultStatements } from "better-auth/plugins/admin/access";
 
 import type { accounts, sessions, users } from "@/api/db/auth.schema";
 
+import db from "@/api/db";
 import env from "@/api/env";
 
-import type { Db } from "../db";
-
 import { trustedOrigins } from "./constants";
+import emailer from "./emailer";
 
 /**
  * Permission statements for access control
@@ -68,54 +67,52 @@ export const adminOptions: AdminOptions & { roles: { [key in string]?: Role; } }
  * @param emailer Email service for sending auth-related emails
  * @returns Configured auth instance
  */
-export function configureAuth(db: Db, emailer: Emailer) {
-  return betterAuth({
-    database: drizzleAdapter(db, {
-      provider: "sqlite",
-      usePlural: true,
-    }),
-    trustedOrigins,
-    emailAndPassword: {
+export default betterAuth({
+  database: drizzleAdapter(db, {
+    provider: "sqlite",
+    usePlural: true,
+  }),
+  trustedOrigins,
+  emailAndPassword: {
+    enabled: true,
+    requireEmailVerification: true,
+    resetPasswordTokenExpiresIn: 10 * 60, // 10 minutes
+    sendResetPassword: async ({ user, url }) => {
+      await emailer.resetPassword({ to: user.email, name: user.name, url });
+    },
+  },
+  emailVerification: {
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
+    expiresIn: 60 * 60, // 1 hour
+    sendVerificationEmail: async ({ user, token }) => {
+      const url = `${env.WEB_URL}/verify-email?token=${token}`;
+      await emailer.verifyEmail({ to: user.email, name: user.name, url });
+    },
+  },
+  plugins: [
+    admin(adminOptions),
+    openAPI(),
+    expo(),
+  ],
+  session: {
+    cookieCache: {
       enabled: true,
-      requireEmailVerification: true,
-      resetPasswordTokenExpiresIn: 10 * 60, // 10 minutes
-      sendResetPassword: async ({ user, url }) => {
-        await emailer.resetPassword({ to: user.email, name: user.name, url });
-      },
+      maxAge: 5 * 60, // Cache duration in seconds
     },
-    emailVerification: {
-      sendOnSignUp: true,
-      autoSignInAfterVerification: true,
-      expiresIn: 60 * 60, // 1 hour
-      sendVerificationEmail: async ({ user, token }) => {
-        const url = `${env.WEB_URL}/verify-email?token=${token}`;
-        await emailer.verifyEmail({ to: user.email, name: user.name, url });
-      },
-    },
-    plugins: [
-      admin(adminOptions),
-      openAPI(),
-      expo(),
-    ],
-    session: {
-      cookieCache: {
-        enabled: true,
-        maxAge: 5 * 60, // Cache duration in seconds
-      },
-    },
-    // Advanced configuration options (currently commented out)
-    // advanced: {
-    //   crossSubDomainCookies: {
-    //     enabled: true,
-    //   },
-    //   defaultCookieAttributes: {
-    //     sameSite: "none",
-    //     secure: true,
-    //     partitioned: true, // New browser standards will mandate this for foreign cookies
-    //   },
-    // },
-  });
-}
+  },
+  // Advanced configuration options (currently commented out)
+  // advanced: {
+  //   crossSubDomainCookies: {
+  //     enabled: true,
+  //   },
+  //   defaultCookieAttributes: {
+  //     sameSite: "none",
+  //     secure: true,
+  //     partitioned: true, // New browser standards will mandate this for foreign cookies
+  //   },
+  // },
+});
 
 /**
  * Type definitions for database entities

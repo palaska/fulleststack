@@ -74,7 +74,6 @@ export const list = createRoute({
 ### Route Handlers
 
 - Use typed route handlers: `AppRouteHandler<RouteType>`
-- Extract context dependencies at start: `const db = c.get("db")`
 - Use proper HTTP status codes from `stoker/http-status-codes`
 - Always validate input with Zod schemas
 

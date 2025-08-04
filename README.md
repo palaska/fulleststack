@@ -54,7 +54,7 @@ Tour:
 - Base [eslint.config.js](./packages/eslint-config/eslint.config.js) with default settings
 - Applications live in [/apps] directory
   - `api`: Hono backend application deployed as a NodeJS server, using Drizzle ORM with Turso.
-    - Features `better-auth` for authentication, configured in `src/lib/better-auth.config.ts`. Auth-related database schema is generated via `pnpm --filter api generate-auth-schema`.
+    - Features `better-auth` for authentication, configured in `src/lib/auth.ts`. Auth-related database schema is generated via `pnpm --filter api generate-auth-schema`.
   - `db`: Contains a local Turso development database setup and data.
   - `mobile`: Expo (React Native) mobile application.
     - Uses `@better-auth/expo` for native authentication flows, integrating with the API's `better-auth` setup.

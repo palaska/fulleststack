@@ -6,7 +6,8 @@ This directory contains the CI workflow configuration for the project.
 
 The CI workflow is defined in `.github/workflows/ci.yml` and consists of the following jobs that run in parallel:
 
-1. **Setup**: Checks out the repository, sets up Node.js and pnpm, installs dependencies, and caches node_modules for other jobs.
+1. **Setup**: Checks out the repository, sets up Node.js and pnpm,
+   installs dependencies, and caches node_modules for other jobs.
 2. **Lint**: Runs linting checks using `pnpm lint`.
 3. **Type Check**: Runs TypeScript type checking using `pnpm typecheck`.
 4. **Build**: Builds the project using `pnpm build`.

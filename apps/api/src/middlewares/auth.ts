@@ -6,20 +6,9 @@ import * as HttpStatusPhrases from "stoker/http-status-phrases";
 import type { statements } from "@/api/lib/auth";
 import type { AppEnv } from "@/api/lib/types";
 
-import db from "@/api/db";
-import { configureAuth, hasPermission, hasRole } from "@/api/lib/auth";
+import auth, { hasPermission, hasRole } from "@/api/lib/auth";
 
 export const attachAuthEntities = createMiddleware<AppEnv>(async (c, next) => {
-  const emailer = c.get("emailer");
-
-  if (!db || !emailer) {
-    throw new Error("Database or emailer not found");
-  }
-
-  const auth = configureAuth(db, emailer);
-
-  c.set("auth", auth);
-
   const session = await auth.api.getSession({ headers: c.req.raw.headers });
 
   if (!session) {
