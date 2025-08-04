@@ -1,2 +1,15 @@
-@layer components {
+.light {
+  --background: 245, 245, 245;
+
+  --border: 212, 212, 212;
+  --card: 255, 255, 255;
+
+  --copy-primary: 23, 23, 23;
+  --copy-secondary: 115, 115, 115;
+
+  --cta: 139, 92, 246;
+  --cta-active: 124, 58, 237;
+  --cta-text: 255, 255, 255;
+
+  background: rgba(var(--background));
 }
