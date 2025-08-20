@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "packageManager": "pnpm@10.10.0",
   "license": "MIT",
+  "engines": {
+    "node": ">=22.15.0",
+    "pnpm": ">=10.0.0"
+  },
   "scripts": {
     "typecheck": "turbo typecheck",
     "build": "turbo build",
