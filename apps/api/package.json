@@ -31,7 +31,7 @@
     "drizzle-orm": "0.43.1",
     "drizzle-zod": "0.7.1",
     "hono": "workspace:*",
-    "hono-pino": "^0.8.0",
+    "hono-pino": "^0.10.2",
     "pino": "^9.6.0",
     "pino-pretty": "^13.0.0",
     "stoker": "^1.4.2",
