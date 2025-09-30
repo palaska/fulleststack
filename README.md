@@ -63,6 +63,28 @@ Tour:
 
 > All pnpm commands are run from the root of the repo.
 
+## Using as a Template
+
+If you're using this repository as a template, you can apply specific commits from the upstream template to your repository:
+
+```sh
+pnpm patch-update <commit-sha>
+```
+
+This script will:
+
+1. Download the patch file from `https://github.com/palaska/fulleststack/commit/<commit-sha>.patch`
+2. Apply it to your repository
+3. Clean up temporary files
+
+Example:
+
+```sh
+pnpm patch-update d3d7a0c
+```
+
+If the patch cannot be applied cleanly, you may need to resolve conflicts manually.
+
 ## Local Setup
 
 ### Install dependencies
@@ -85,6 +107,7 @@ Update the values in the `.dev.vars` file with your Turso credentials.
 
 This command applies migrations to your local Turso database if you are using `turso dev` or a local libSQL file.
 If you are using a remote Turso dev database, configure `apps/api/drizzle.config.ts` accordingly or use the production migration command.
+
 ```sh
 pnpm --filter api db:push
 ```
@@ -104,6 +127,7 @@ All requests to `/api` will be proxied to the hono server running on [http://loc
 ### Run DB migrations on Turso
 
 This command applies migrations to your production Turso database. Ensure `apps/api/drizzle.config.ts` is configured for your production database.
+
 ```sh
 pnpm --filter api db:push
 ```
