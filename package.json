@@ -21,7 +21,9 @@
     "syncpack:fix": "syncpack fix-mismatches",
     "syncpack:check": "syncpack list-mismatches",
     "syncpack:list": "syncpack list",
-    "patch-update": "bash scripts/apply-template-patch.sh"
+    "template:setup": "bash scripts/sync-from-template.sh setup",
+    "template:list": "bash scripts/sync-from-template.sh list",
+    "template:apply": "bash scripts/sync-from-template.sh apply"
   },
   "devDependencies": {
     "semver": "^7.7.1",

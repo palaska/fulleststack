@@ -65,25 +65,53 @@ Tour:
 
 ## Using as a Template
 
-If you're using this repository as a template, you can apply specific commits from the upstream template to your repository:
+If you're using this repository as a template, you can sync updates from the upstream template using git remotes and cherry-pick.
+
+### One-time Setup
+
+First, add the template repository as a remote:
 
 ```sh
-pnpm patch-update <commit-sha>
+pnpm template:setup
 ```
 
-This script will:
+This configures the template remote and fetches the latest commits.
 
-1. Download the patch file from `https://github.com/palaska/fulleststack/commit/<commit-sha>.patch`
-2. Apply it to your repository
-3. Clean up temporary files
+### List Available Updates
+
+View recent commits from the template:
+
+```sh
+pnpm template:list
+```
+
+Or see commits since a specific SHA:
+
+```sh
+pnpm template:list --since <your-last-sync-sha>
+```
+
+### Apply Updates
+
+Apply one or more commits from the template:
+
+```sh
+pnpm template:apply <commit-sha>
+```
+
+Apply multiple commits at once:
+
+```sh
+pnpm template:apply <sha1> <sha2> <sha3>
+```
 
 Example:
 
 ```sh
-pnpm patch-update d3d7a0c
+pnpm template:apply d3d7a0c
 ```
 
-If the patch cannot be applied cleanly, you may need to resolve conflicts manually.
+If conflicts occur, resolve them and continue with `git cherry-pick --continue`, or abort with `git cherry-pick --abort`.
 
 ## Local Setup
 
