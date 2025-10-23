@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 
-import { Alert, Button, ErrorMessage, Field, Label, Textarea } from "@/web/components";
+import { Alert, Button, ErrorMessage, Field, Input, Label, Textarea } from "@/web/components";
 import { useAuth } from "@/web/hooks/useAuth";
 import { createTask, queryKeys } from "@/web/lib/queries/tasks";
 
@@ -22,6 +22,7 @@ export default function TaskForm() {
     defaultValues: {
       name: "",
       done: false,
+      dueDate: null,
     },
     resolver: zodResolver(insertTasksSchema),
   });
@@ -53,6 +54,18 @@ export default function TaskForm() {
           rows={2}
         />
         <ErrorMessage>{errors?.name?.message ?? <>&nbsp;</>}</ErrorMessage>
+      </Field>
+
+      <Field>
+        <Label>Due Date (Optional)</Label>
+        <Input
+          type="date"
+          {...register("dueDate", {
+            setValueAs: value => value ? new Date(value) : null,
+          })}
+          disabled={createMutation.isPending}
+        />
+        <ErrorMessage>{errors?.dueDate?.message ?? <>&nbsp;</>}</ErrorMessage>
       </Field>
 
       <div className="mt-4 flex justify-end">

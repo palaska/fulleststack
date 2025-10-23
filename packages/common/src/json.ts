@@ -17,17 +17,20 @@ type DateFieldNames = typeof DEFAULT_DATE_FIELDS[number];
  * This type:
  * 1. Handles arrays by recursively applying the transformation to each element
  * 2. For objects, transforms string fields with names matching K to Date objects
- * 3. Recursively processes nested objects
- * 4. Preserves the original type for all other cases
+ * 3. Handles nullable and optional date fields
+ * 4. Recursively processes nested objects
+ * 5. Preserves the original type for all other cases
  */
 type WithParsedDates<T, K extends string> = T extends (infer U)[]
   ? WithParsedDates<U, K>[]
   : T extends object
     ? {
         [P in keyof T]: P extends K
-          ? T[P] extends string
-            ? Date
-            : T[P]
+          ? T[P] extends string | null | undefined
+            ? Date | Extract<T[P], null | undefined>
+            : T[P] extends string
+              ? Date
+              : T[P]
           : T[P] extends object
             ? WithParsedDates<T[P], K>
             : T[P];

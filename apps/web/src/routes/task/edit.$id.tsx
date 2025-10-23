@@ -4,7 +4,7 @@ import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Controller, useForm } from "react-hook-form";
 
-import { Button, Checkbox, CheckboxField, Description, Label, RoutePending } from "@/web/components";
+import { Button, Checkbox, CheckboxField, Description, Field, Input, Label, RoutePending } from "@/web/components";
 import { deleteTask, getTaskQueryOptions, queryKeys, updateTask } from "@/web/lib/queries/tasks";
 import queryClient from "@/web/lib/query-client";
 
@@ -23,6 +23,7 @@ function RouteComponent() {
   const {
     control,
     handleSubmit,
+    register,
     formState: { isDirty },
   } = useForm<patchTasksSchema>({
     defaultValues: data,
@@ -71,6 +72,20 @@ function RouteComponent() {
                 </CheckboxField>
               )}
             />
+          </div>
+
+          <div className="mt-4">
+            <Field>
+              <Label>Due Date</Label>
+              <Input
+                type="date"
+                {...register("dueDate", {
+                  setValueAs: value => value ? new Date(value) : null,
+                })}
+                defaultValue={data.dueDate?.toISOString().split("T")[0] ?? ""}
+              />
+              <Description>Optional due date for this task</Description>
+            </Field>
           </div>
         </div>
       </div>
