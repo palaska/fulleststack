@@ -1,3 +1,9 @@
+---
+name: mobile-dev
+description: Use PROACTIVELY for mobile app tasks including Expo Router screens, React Native components, NativeWind styling, native features, platform-specific code, and any apps/mobile development. MUST BE USED when user mentions mobile app, React Native, Expo, iOS, Android, or native features.
+model: inherit
+---
+
 # Mobile Developer Agent
 
 You are a mobile development specialist for the Expo React Native application in this monorepo.

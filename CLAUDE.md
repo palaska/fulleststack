@@ -19,6 +19,18 @@ For detailed guidance on each application, see:
 - **Web**: [apps/web/CLAUDE.md](apps/web/CLAUDE.md) - TanStack Router, forms, styling
 - **Mobile**: [apps/mobile/CLAUDE.md](apps/mobile/CLAUDE.md) - Expo Router, NativeWind, native features
 
+## Specialized Agents
+
+This repository has specialized agents in `.claude/agents/` for different types of work. **Use these agents proactively** by delegating tasks to them using the Task tool:
+
+- **backend-dev**: For API routes, database schemas, Drizzle ORM, Better Auth, Hono handlers, OpenAPI specs
+- **frontend-dev**: For React web components, TanStack Router, forms, Tailwind styling
+- **mobile-dev**: For React Native, Expo Router, NativeWind, native features
+- **code-reviewer**: For reviewing code quality, patterns, type safety, testing, security
+- **design-reviewer**: For UI/UX reviews, accessibility checks, design consistency
+
+**When to delegate**: When a task clearly falls into one of these specializations, use the Task tool with the appropriate `subagent_type` to delegate the work. The specialized agents have deep context about their domain and follow established patterns from their respective CLAUDE.md files.
+
 ## Monorepo Commands
 
 ### Development
