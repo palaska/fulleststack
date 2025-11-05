@@ -67,11 +67,14 @@ This repo can be used as a template and synced with upstream:
 
 ```sh
 pnpm template:setup              # Add template repository as remote (one-time)
+pnpm template:sync               # Interactive sync - auto-detects and selects new commits
 pnpm template:list               # View available updates from template
 pnpm template:list --since <sha> # View updates since specific commit
 pnpm template:apply <sha>        # Cherry-pick specific commits
 pnpm template:apply <sha1> <sha2> # Apply multiple commits
 ```
+
+**Recommended workflow**: Use `pnpm template:sync` for an interactive experience that automatically detects the last applied commit and lets you select which new commits to apply. All commits are pre-selected by default.
 
 ## Critical Cross-Cutting Pattern: Type-Safe API Client
 
