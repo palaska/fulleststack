@@ -120,31 +120,6 @@ Applied commits will have a `[template]` prefix and include a source link to the
 This repository supports Model Context Protocol (MCP) servers for enhanced development workflows. Currently configured:
 
 - **Playwright MCP**: Browser automation for testing
-- **GitHub MCP**: GitHub API integration (requires token)
-
-### GitHub MCP Setup
-
-To enable GitHub integration (for creating PRs, managing issues, etc.):
-
-1. Create a GitHub Personal Access Token at https://github.com/settings/tokens/new
-   - Scopes required: `repo`, `workflow`
-2. Create `.mcp.local.json` in the root (already gitignored):
-
-```json
-{
-  "mcpServers": {
-    "github": {
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "your-token-here"
-      }
-    }
-  }
-}
-```
-
-3. Restart Claude Code to load the MCP server
-
-See `.mcp.local.json.example` for a template. The `.mcp.json` file contains the base MCP configuration without secrets.
 
 ## Local Setup
 
