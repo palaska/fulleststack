@@ -1,24 +1,28 @@
 {
   "permissions": {
     "allow": [
+      "Bash(cat:*)",
+      "Bash(chmod:*)",
+      "Bash(find:*)",
+      "Bash(gh pr create:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git remote:*)",
       "Bash(grep:*)",
       "Bash(ls:*)",
-      "Bash(source:*)",
-      "Bash(find:*)",
-      "Bash(mv:*)",
       "Bash(mkdir:*)",
-      "Bash(tree:*)",
+      "Bash(mv:*)",
+      "Bash(source:*)",
       "Bash(touch:*)",
-      "Bash(chmod:*)",
-      "Bash(cat:*)",
+      "Bash(tree:*)",
       "WebFetch(domain:*)",
-      "Bash(gh issue view:*)",
-      "WebFetch(domain:docs.anthropic.com)"
+      "WebFetch(domain:docs.anthropic.com)",
+      "Bash(git add:*)"
     ],
     "deny": []
   },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "playwright"
-  ],
-  "enableAllProjectMcpServers": true
+  ]
 }

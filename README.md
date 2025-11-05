@@ -113,6 +113,14 @@ pnpm template:apply d3d7a0c
 
 If conflicts occur, resolve them and continue with `git cherry-pick --continue`, or abort with `git cherry-pick --abort`.
 
+Applied commits will have a `[template]` prefix and include a source link to the original commit in the template repository.
+
+## MCP Configuration (Optional)
+
+This repository supports Model Context Protocol (MCP) servers for enhanced development workflows. Currently configured:
+
+- **Playwright MCP**: Browser automation for testing
+
 ## Local Setup
 
 ### Install dependencies
@@ -121,7 +129,7 @@ If conflicts occur, resolve them and continue with `git cherry-pick --continue`,
 pnpm i
 ```
 
-### Configure Turso Database
+### Configure Environment Variables
 
 Create a `.dev.vars` file in the `apps/api` directory using the example file as a template:
 
@@ -129,7 +137,14 @@ Create a `.dev.vars` file in the `apps/api` directory using the example file as 
 cp apps/api/.dev.vars.example apps/api/.dev.vars
 ```
 
-Update the values in the `.dev.vars` file with your Turso credentials.
+Update the values in the `.dev.vars` file with your configuration:
+
+- **Turso Database**: `TURSO_URL` and `TURSO_AUTH_TOKEN` for your database
+  - For local development: use `http://127.0.0.1:8080` with `turso dev`
+  - For remote: use your Turso database URL and auth token
+- **Better Auth**: `BETTER_AUTH_SECRET` (at least 32 characters) for JWT signing
+- **Resend** (optional): `RESEND_API_KEY` and `EMAIL_FROM` for email functionality
+- **URLs**: `API_URL` and `WEB_URL` for your local development environment
 
 ### Run DB migrations locally
 

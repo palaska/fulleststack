@@ -64,16 +64,43 @@ command_apply() {
     echo "Fetching from template..."
     git fetch "$REMOTE_NAME" --quiet
 
-    echo "Applying commit(s): $*"
-    if git cherry-pick "$@"; then
-        echo "✓ Successfully applied commit(s)"
-    else
-        echo ""
-        echo "⚠ Cherry-pick encountered conflicts"
-        echo "Resolve conflicts, then run: git cherry-pick --continue"
-        echo "Or abort with: git cherry-pick --abort"
-        exit 1
-    fi
+    # Process each commit individually to customize the message
+    for sha in "$@"; do
+        echo "Applying commit: $sha"
+
+        # Get the original commit message
+        original_subject=$(git log -1 --format=%s "$sha")
+        original_body=$(git log -1 --format=%b "$sha")
+
+        # Cherry-pick without committing
+        if ! git cherry-pick --no-commit "$sha"; then
+            echo ""
+            echo "⚠ Cherry-pick encountered conflicts for $sha"
+            echo "Resolve conflicts, then run:"
+            echo "  git add ."
+            echo "  git commit"
+            echo "Or abort with: git reset --hard HEAD"
+            exit 1
+        fi
+
+        # Create new commit message with prefix and source link
+        commit_msg="[template] ${original_subject}"
+        if [ -n "$original_body" ]; then
+            commit_msg="${commit_msg}\n\n${original_body}"
+        fi
+        commit_msg="${commit_msg}\n\nSource: https://github.com/palaska/fulleststack/commit/${sha}"
+
+        # Commit with the new message
+        if ! echo -e "$commit_msg" | git commit -F -; then
+            echo "⚠ Failed to commit changes for $sha"
+            exit 1
+        fi
+
+        echo "✓ Successfully applied $sha"
+    done
+
+    echo ""
+    echo "✓ All commits applied successfully"
 }
 
 case "$1" in
