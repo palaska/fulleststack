@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "github": {
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "<your-github-token-here>"
+      }
+    }
+  }
+}

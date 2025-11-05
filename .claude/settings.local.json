@@ -12,13 +12,13 @@
       "Bash(chmod:*)",
       "Bash(cat:*)",
       "WebFetch(domain:*)",
-      "Bash(gh issue view:*)",
       "WebFetch(domain:docs.anthropic.com)"
     ],
     "deny": []
   },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
-    "playwright"
-  ],
-  "enableAllProjectMcpServers": true
+    "playwright",
+    "github"
+  ]
 }
